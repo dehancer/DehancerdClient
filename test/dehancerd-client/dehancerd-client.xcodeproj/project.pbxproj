@@ -1,0 +1,577 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3108793C2207831000525575 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3108793B2207831000525575 /* AppDelegate.swift */; };
+		3108793E2207831000525575 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3108793D2207831000525575 /* Assets.xcassets */; };
+		310879412207831000525575 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3108793F2207831000525575 /* MainMenu.xib */; };
+		3108794D2207831100525575 /* dehancerd_clientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3108794C2207831100525575 /* dehancerd_clientTests.swift */; };
+		31EA75EA220823DE002A5073 /* JsonRpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EA75E9220823DE002A5073 /* JsonRpc.swift */; };
+		31EA75EE22085815002A5073 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EA75ED22085815002A5073 /* help.swift */; };
+		31EA75F022085930002A5073 /* get-auth-token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EA75EF22085930002A5073 /* get-auth-token.swift */; };
+		31EADBA52208DF8100D24039 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EADBA42208DF8100D24039 /* Session.swift */; };
+		31EADBA72208E0D500D24039 /* get-profile-list.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EADBA62208E0D500D24039 /* get-profile-list.swift */; };
+		4494CD815E4381C0515D03AA /* Pods_dehancerd_client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C61548CB6A002E6DCD58F51 /* Pods_dehancerd_client.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		310879492207831100525575 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 310879302207831000525575 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 310879372207831000525575;
+			remoteInfo = "dehancerd-client";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		105CE1F2A1C34299CCEB7876 /* Pods-dehancerd-client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dehancerd-client.release.xcconfig"; path = "Target Support Files/Pods-dehancerd-client/Pods-dehancerd-client.release.xcconfig"; sourceTree = "<group>"; };
+		310879382207831000525575 /* dehancerd-client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dehancerd-client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3108793B2207831000525575 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3108793D2207831000525575 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		310879402207831000525575 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		310879422207831000525575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		310879432207831000525575 /* dehancerd_client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = dehancerd_client.entitlements; sourceTree = "<group>"; };
+		310879482207831100525575 /* dehancerd-clientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "dehancerd-clientTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3108794C2207831100525575 /* dehancerd_clientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dehancerd_clientTests.swift; sourceTree = "<group>"; };
+		3108794E2207831100525575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		31EA75E9220823DE002A5073 /* JsonRpc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonRpc.swift; sourceTree = "<group>"; };
+		31EA75ED22085815002A5073 /* help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = help.swift; sourceTree = "<group>"; };
+		31EA75EF22085930002A5073 /* get-auth-token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "get-auth-token.swift"; sourceTree = "<group>"; };
+		31EADBA42208DF8100D24039 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		31EADBA62208E0D500D24039 /* get-profile-list.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "get-profile-list.swift"; sourceTree = "<group>"; };
+		6C61548CB6A002E6DCD58F51 /* Pods_dehancerd_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dehancerd_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1BA2F05EBBC4CD2B068E021 /* Pods-dehancerd-client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dehancerd-client.debug.xcconfig"; path = "Target Support Files/Pods-dehancerd-client/Pods-dehancerd-client.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		310879352207831000525575 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4494CD815E4381C0515D03AA /* Pods_dehancerd_client.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		310879452207831100525575 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1C0B23B0B56B6E7E43D70EE5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C61548CB6A002E6DCD58F51 /* Pods_dehancerd_client.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3108792F2207831000525575 = {
+			isa = PBXGroup;
+			children = (
+				3108793A2207831000525575 /* dehancerd-client */,
+				3108794B2207831100525575 /* dehancerd-clientTests */,
+				310879392207831000525575 /* Products */,
+				DFAE80EC42910E77049C3F39 /* Pods */,
+				1C0B23B0B56B6E7E43D70EE5 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		310879392207831000525575 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				310879382207831000525575 /* dehancerd-client.app */,
+				310879482207831100525575 /* dehancerd-clientTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3108793A2207831000525575 /* dehancerd-client */ = {
+			isa = PBXGroup;
+			children = (
+				31EA75EB220823E5002A5073 /* Classes */,
+				3108793B2207831000525575 /* AppDelegate.swift */,
+				3108793D2207831000525575 /* Assets.xcassets */,
+				3108793F2207831000525575 /* MainMenu.xib */,
+				310879422207831000525575 /* Info.plist */,
+				310879432207831000525575 /* dehancerd_client.entitlements */,
+			);
+			path = "dehancerd-client";
+			sourceTree = "<group>";
+		};
+		3108794B2207831100525575 /* dehancerd-clientTests */ = {
+			isa = PBXGroup;
+			children = (
+				3108794C2207831100525575 /* dehancerd_clientTests.swift */,
+				3108794E2207831100525575 /* Info.plist */,
+			);
+			path = "dehancerd-clientTests";
+			sourceTree = "<group>";
+		};
+		31EA75EB220823E5002A5073 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				31EA75EC22085808002A5073 /* api */,
+				31EA75E9220823DE002A5073 /* JsonRpc.swift */,
+				31EADBA42208DF8100D24039 /* Session.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		31EA75EC22085808002A5073 /* api */ = {
+			isa = PBXGroup;
+			children = (
+				31EA75ED22085815002A5073 /* help.swift */,
+				31EA75EF22085930002A5073 /* get-auth-token.swift */,
+				31EADBA62208E0D500D24039 /* get-profile-list.swift */,
+			);
+			path = api;
+			sourceTree = "<group>";
+		};
+		DFAE80EC42910E77049C3F39 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E1BA2F05EBBC4CD2B068E021 /* Pods-dehancerd-client.debug.xcconfig */,
+				105CE1F2A1C34299CCEB7876 /* Pods-dehancerd-client.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		310879372207831000525575 /* dehancerd-client */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 310879512207831100525575 /* Build configuration list for PBXNativeTarget "dehancerd-client" */;
+			buildPhases = (
+				D32A883B68E9971E847204B7 /* [CP] Check Pods Manifest.lock */,
+				310879342207831000525575 /* Sources */,
+				310879352207831000525575 /* Frameworks */,
+				310879362207831000525575 /* Resources */,
+				4C892CDEC8BB755BB89828D9 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "dehancerd-client";
+			productName = "dehancerd-client";
+			productReference = 310879382207831000525575 /* dehancerd-client.app */;
+			productType = "com.apple.product-type.application";
+		};
+		310879472207831100525575 /* dehancerd-clientTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 310879542207831100525575 /* Build configuration list for PBXNativeTarget "dehancerd-clientTests" */;
+			buildPhases = (
+				310879442207831100525575 /* Sources */,
+				310879452207831100525575 /* Frameworks */,
+				310879462207831100525575 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3108794A2207831100525575 /* PBXTargetDependency */,
+			);
+			name = "dehancerd-clientTests";
+			productName = "dehancerd-clientTests";
+			productReference = 310879482207831100525575 /* dehancerd-clientTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		310879302207831000525575 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = Dehacer;
+				TargetAttributes = {
+					310879372207831000525575 = {
+						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
+					};
+					310879472207831100525575 = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = 310879372207831000525575;
+					};
+				};
+			};
+			buildConfigurationList = 310879332207831000525575 /* Build configuration list for PBXProject "dehancerd-client" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3108792F2207831000525575;
+			productRefGroup = 310879392207831000525575 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				310879372207831000525575 /* dehancerd-client */,
+				310879472207831100525575 /* dehancerd-clientTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		310879362207831000525575 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3108793E2207831000525575 /* Assets.xcassets in Resources */,
+				310879412207831000525575 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		310879462207831100525575 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C892CDEC8BB755BB89828D9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-dehancerd-client/Pods-dehancerd-client-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
+				"${BUILT_PRODUCTS_DIR}/ed25519/ed25519.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ed25519.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-dehancerd-client/Pods-dehancerd-client-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D32A883B68E9971E847204B7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-dehancerd-client-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		310879342207831000525575 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31EA75F022085930002A5073 /* get-auth-token.swift in Sources */,
+				31EADBA52208DF8100D24039 /* Session.swift in Sources */,
+				31EADBA72208E0D500D24039 /* get-profile-list.swift in Sources */,
+				3108793C2207831000525575 /* AppDelegate.swift in Sources */,
+				31EA75EA220823DE002A5073 /* JsonRpc.swift in Sources */,
+				31EA75EE22085815002A5073 /* help.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		310879442207831100525575 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3108794D2207831100525575 /* dehancerd_clientTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3108794A2207831100525575 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 310879372207831000525575 /* dehancerd-client */;
+			targetProxy = 310879492207831100525575 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		3108793F2207831000525575 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				310879402207831000525575 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3108794F2207831100525575 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		310879502207831100525575 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		310879522207831100525575 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1BA2F05EBBC4CD2B068E021 /* Pods-dehancerd-client.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TCA85S5T49;
+				INFOPLIST_FILE = "dehancerd-client/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Dehancer.dehancerd-client";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		310879532207831100525575 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 105CE1F2A1C34299CCEB7876 /* Pods-dehancerd-client.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TCA85S5T49;
+				INFOPLIST_FILE = "dehancerd-client/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Dehancer.dehancerd-client";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+		310879552207831100525575 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TCA85S5T49;
+				INFOPLIST_FILE = "dehancerd-clientTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Dehancer.dehancerd-clientTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dehancerd-client.app/Contents/MacOS/dehancerd-client";
+			};
+			name = Debug;
+		};
+		310879562207831100525575 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TCA85S5T49;
+				INFOPLIST_FILE = "dehancerd-clientTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Dehancer.dehancerd-clientTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dehancerd-client.app/Contents/MacOS/dehancerd-client";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		310879332207831000525575 /* Build configuration list for PBXProject "dehancerd-client" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3108794F2207831100525575 /* Debug */,
+				310879502207831100525575 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		310879512207831100525575 /* Build configuration list for PBXNativeTarget "dehancerd-client" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				310879522207831100525575 /* Debug */,
+				310879532207831100525575 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		310879542207831100525575 /* Build configuration list for PBXNativeTarget "dehancerd-clientTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				310879552207831100525575 /* Debug */,
+				310879562207831100525575 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 310879302207831000525575 /* Project object */;
+}

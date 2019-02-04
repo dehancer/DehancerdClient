@@ -1,0 +1,12 @@
+use_frameworks!
+platform :osx, '10.14'
+
+pre_install do |installer|
+    # workaround for #3289
+    Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+end
+
+target 'dehancerd-client' do
+  pod 'ObjectMapper'
+  pod 'ed25519', :path => '../../../ed25519cpp'
+end
