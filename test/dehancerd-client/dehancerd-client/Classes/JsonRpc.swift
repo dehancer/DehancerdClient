@@ -9,6 +9,21 @@
 import Foundation
 import ObjectMapper
 
+public enum ResponseCode:Int {
+    case parseError            = -32700
+    case invalidRequest        = -32600
+    case methodNotFound        = -32601
+    case invalidParams         = -32602
+    case internalError         = -32603
+    case serverErrorStart      = -32099
+    case saerverErrorEnd       = -32000
+    case unknownErrorCode      = -32001
+    
+    case notAuthorized         = -40001
+    case accessForbidden       = -40003
+    case clientNotRegistered   = -40004
+}
+
 public enum Result<T> {
     case success(T,Int)
     case error(Error)
@@ -27,7 +42,7 @@ public class Params:Mappable {
 public protocol Request {
     
     typealias ResponsObject = Any
-    associatedtype ResponseType:Response
+    associatedtype ResponseType//:Response
     
     var method:String {get}
     var params:Params? {get}
@@ -63,7 +78,7 @@ public class JsonRpc {
             r.httpMethod = "POST"
             r.httpBody = data
             
-            URLSession.shared.dataTask(with: r) {
+            URLSession(configuration: .default).dataTask(with: r) {
                 
                 data, response, error in
                 
@@ -123,6 +138,7 @@ public class JsonRpc {
                         complete(Result.error(e))
                     }
                 }
+                    
                 catch {
                     complete(Result.error(error))
                 }

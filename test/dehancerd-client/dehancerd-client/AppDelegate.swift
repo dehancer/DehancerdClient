@@ -33,7 +33,6 @@ struct Config {
     static let cuid = try! Pair(secretPhrase: "dehancerd test client")
 }
 
-
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
@@ -53,30 +52,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         api:    Config.accessPair, apiName: Config.accessName
                 )
                 
-                .open(mode: Config.mode) { result in
-                    switch result {
-                        
-                    case .success(let token, let id):
-                        
-                        Swift.print(" token:  ", token, id)
-                        
-                    case .error(let error):
-                        OperationQueue.main.addOperation {
-                            NSAlert(error: error).runModal()
-                        }
+                .connect() { error in
+                    OperationQueue.main.addOperation {
+                        NSAlert(error: error).runModal()
                     }
+                    Swift.print("Service connection error:  ", error._code)
                 }
                 
-                .get_profile_list { result  in
+                .profile_list{ result in
                     switch result {
                     case .success(let d, _):
                         
                         for i in d {
-                            Swift.print(" list:  ", i.toJSON())
+                            
+                            Swift.print(" list:  ", i.url!)
+                            
+                            URLSession(configuration: .default)
+                                .downloadTask(with: i.url!) { localURL, urlResponse, error in
+                                if let localURL = localURL {
+                                    print(localURL)
+                                    if let string = try? String(contentsOf: localURL) {
+                                        //print(string)
+                                    }
+                                }
+                            }.resume()
                         }
                         
                     case .error(let error):
-                        Swift.print(" error:  ", error)
+                        Swift.print("Service profile_list error:  ", error)
+                        
+                        
                     }
             }
             
