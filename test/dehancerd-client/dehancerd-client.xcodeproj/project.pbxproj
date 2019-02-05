@@ -11,13 +11,6 @@
 		3108793E2207831000525575 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3108793D2207831000525575 /* Assets.xcassets */; };
 		310879412207831000525575 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3108793F2207831000525575 /* MainMenu.xib */; };
 		3108794D2207831100525575 /* dehancerd_clientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3108794C2207831100525575 /* dehancerd_clientTests.swift */; };
-		31EA75EA220823DE002A5073 /* JsonRpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EA75E9220823DE002A5073 /* JsonRpc.swift */; };
-		31EA75EE22085815002A5073 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EA75ED22085815002A5073 /* help.swift */; };
-		31EA75F022085930002A5073 /* get-auth-token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EA75EF22085930002A5073 /* get-auth-token.swift */; };
-		31EADBA52208DF8100D24039 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EADBA42208DF8100D24039 /* Session.swift */; };
-		31EADBA72208E0D500D24039 /* get-profile-list.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EADBA62208E0D500D24039 /* get-profile-list.swift */; };
-		31EADBA922091A4300D24039 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EADBA822091A4300D24039 /* Promise.swift */; };
-		31EADBAB2209C9BB00D24039 /* get-cuid-state.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EADBAA2209C9BB00D24039 /* get-cuid-state.swift */; };
 		4494CD815E4381C0515D03AA /* Pods_dehancerd_client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C61548CB6A002E6DCD58F51 /* Pods_dehancerd_client.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,13 +35,6 @@
 		310879482207831100525575 /* dehancerd-clientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "dehancerd-clientTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3108794C2207831100525575 /* dehancerd_clientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dehancerd_clientTests.swift; sourceTree = "<group>"; };
 		3108794E2207831100525575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		31EA75E9220823DE002A5073 /* JsonRpc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonRpc.swift; sourceTree = "<group>"; };
-		31EA75ED22085815002A5073 /* help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = help.swift; sourceTree = "<group>"; };
-		31EA75EF22085930002A5073 /* get-auth-token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "get-auth-token.swift"; sourceTree = "<group>"; };
-		31EADBA42208DF8100D24039 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
-		31EADBA62208E0D500D24039 /* get-profile-list.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "get-profile-list.swift"; sourceTree = "<group>"; };
-		31EADBA822091A4300D24039 /* Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
-		31EADBAA2209C9BB00D24039 /* get-cuid-state.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "get-cuid-state.swift"; sourceTree = "<group>"; };
 		6C61548CB6A002E6DCD58F51 /* Pods_dehancerd_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_dehancerd_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1BA2F05EBBC4CD2B068E021 /* Pods-dehancerd-client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dehancerd-client.debug.xcconfig"; path = "Target Support Files/Pods-dehancerd-client/Pods-dehancerd-client.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,7 +89,6 @@
 		3108793A2207831000525575 /* dehancerd-client */ = {
 			isa = PBXGroup;
 			children = (
-				31EA75EB220823E5002A5073 /* Classes */,
 				3108793B2207831000525575 /* AppDelegate.swift */,
 				3108793D2207831000525575 /* Assets.xcassets */,
 				3108793F2207831000525575 /* MainMenu.xib */,
@@ -120,28 +105,6 @@
 				3108794E2207831100525575 /* Info.plist */,
 			);
 			path = "dehancerd-clientTests";
-			sourceTree = "<group>";
-		};
-		31EA75EB220823E5002A5073 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				31EA75EC22085808002A5073 /* api */,
-				31EA75E9220823DE002A5073 /* JsonRpc.swift */,
-				31EADBA822091A4300D24039 /* Promise.swift */,
-				31EADBA42208DF8100D24039 /* Session.swift */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
-		31EA75EC22085808002A5073 /* api */ = {
-			isa = PBXGroup;
-			children = (
-				31EA75ED22085815002A5073 /* help.swift */,
-				31EA75EF22085930002A5073 /* get-auth-token.swift */,
-				31EADBAA2209C9BB00D24039 /* get-cuid-state.swift */,
-				31EADBA62208E0D500D24039 /* get-profile-list.swift */,
-			);
-			path = api;
 			sourceTree = "<group>";
 		};
 		DFAE80EC42910E77049C3F39 /* Pods */ = {
@@ -265,6 +228,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-dehancerd-client/Pods-dehancerd-client-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DehancerdClient/DehancerdClient.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/ed25519/ed25519.framework",
 			);
@@ -272,6 +236,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DehancerdClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ed25519.framework",
 			);
@@ -309,14 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				31EA75F022085930002A5073 /* get-auth-token.swift in Sources */,
-				31EADBA52208DF8100D24039 /* Session.swift in Sources */,
-				31EADBA922091A4300D24039 /* Promise.swift in Sources */,
-				31EADBAB2209C9BB00D24039 /* get-cuid-state.swift in Sources */,
-				31EADBA72208E0D500D24039 /* get-profile-list.swift in Sources */,
 				3108793C2207831000525575 /* AppDelegate.swift in Sources */,
-				31EA75EA220823DE002A5073 /* JsonRpc.swift in Sources */,
-				31EA75EE22085815002A5073 /* help.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

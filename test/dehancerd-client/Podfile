@@ -9,4 +9,5 @@ end
 target 'dehancerd-client' do
   pod 'ObjectMapper'
   pod 'ed25519', :path => '../../../ed25519cpp'
+  pod 'DehancerdClient', :path => '../../'
 end

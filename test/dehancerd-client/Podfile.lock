@@ -1,8 +1,12 @@
 PODS:
+  - DehancerdClient (0.1.0):
+    - ed25519
+    - ObjectMapper
   - ed25519 (0.5.0)
   - ObjectMapper (3.4.2)
 
 DEPENDENCIES:
+  - DehancerdClient (from `../../`)
   - ed25519 (from `../../../ed25519cpp`)
   - ObjectMapper
 
@@ -11,13 +15,16 @@ SPEC REPOS:
     - ObjectMapper
 
 EXTERNAL SOURCES:
+  DehancerdClient:
+    :path: "../../"
   ed25519:
     :path: "../../../ed25519cpp"
 
 SPEC CHECKSUMS:
-  ed25519: 364eecae79493dfaacc1f4b6c464118bd5b9c210
+  DehancerdClient: 96746289ac4f309272a83ca01c4ecae037c5acb9
+  ed25519: f417d7d01cd6c3f38842834b1b74d39eba078dcf
   ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
 
-PODFILE CHECKSUM: bd5c7fef5fa4a978686685bdd961b7940174b78f
+PODFILE CHECKSUM: b31ffc7dd85a14636c7adbc20ac9f06526f8432f
 
 COCOAPODS: 1.6.0.beta.2

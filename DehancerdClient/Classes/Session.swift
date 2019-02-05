@@ -9,7 +9,7 @@
 import Foundation
 import ed25519
 
-final class Session {
+public final class Session {
     
     public enum OpenMode {
         case reuse
@@ -117,15 +117,16 @@ final class Session {
     fileprivate static let accessTokenKey = "dehancerd-api-access-token"
 }
 
-extension Future where Value: Session {
-        
-     @discardableResult func profile_list(complete:((Result<[Profile]>) -> ())? = nil) -> Future<Value> {
+public extension Future where Value: Session {
+    
+     @discardableResult public func profile_list(complete:((Result<[Profile]>) -> ())? = nil) -> Future<Value> {
         return chained { session in
             
             let promise = Promise<Value>()
             
             func get_list (token: String) {
                 do {
+                    
                     let list = try get_profile_list_request(key: session.clientPair.privateKey.encode(), token: token)
                     
                     session.rpc.send(request: list) { result  in
@@ -153,31 +154,27 @@ extension Future where Value: Session {
             }
             
             guard let token = session.accessToken else {
-                
+
                 do {
-                    
+
                     let auth = try get_auth_token_request(
                         cuid: session.clientPair.publicKey.encode(),
                         key: session.apiPair.privateKey.encode(),
                         api: session.apiName)
-                    
+
                     session.rpc.send(request: auth) { result  in
-                        
+
                         switch result {
                         case .success(let data,_):
-                            
+
                             session.accessToken =  data.token
-                            
-                            get_list(token: session.accessToken!)
-                            
-                            //promise.resolve(with: self) {
-                            //    complete?(Result.success(data.token, id))
-                            //}
-                            
+
+                            get_list(token: session.accessToken!)                        
+
                         case .error(let error):
-                            
+
                             session.accessToken = nil
-                            
+
                             promise.reject(with: error){
                                 complete?(Result.error(error))
                             }
@@ -190,7 +187,7 @@ extension Future where Value: Session {
                         complete?(Result.error(error))
                     }
                 }
-                
+
                 return promise
             }
            

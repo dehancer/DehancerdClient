@@ -13,17 +13,12 @@ public enum FutureResult<Value> {
     case error(Error)
 }
 
-class Future<Value> {
+public class Future<Value> {
     
     fileprivate var result: FutureResult<Value>? {        
         didSet {
             result.map(report)
         }
-    }
-    
-    @discardableResult func fail(with callback: @escaping ((Future<Value>) -> Void)) -> Future<Value> {
-        callback(self)
-        return self
     }
     
     private lazy var callbacks = [(FutureResult<Value>) -> Void]()
@@ -41,7 +36,7 @@ class Future<Value> {
     }
 }
 
-class Promise<Value>: Future<Value> {
+public class Promise<Value>: Future<Value> {
     init(value: Value? = nil) {
         super.init()
 
@@ -61,9 +56,9 @@ class Promise<Value>: Future<Value> {
     }
 }
 
-extension Future {
+public extension Future {
     
-    func chained<NextValue>(with closure: @escaping (Value) throws -> Future<NextValue>) -> Future<NextValue> {
+    public func chained<NextValue>(with closure: @escaping (Value) throws -> Future<NextValue>) -> Future<NextValue> {
        
         let promise = Promise<NextValue>()
 
@@ -96,7 +91,7 @@ extension Future {
         return promise
     }
 
-    func transformed<NextValue>(with closure: @escaping (Value) throws -> NextValue) -> Future<NextValue> {
+    public func transformed<NextValue>(with closure: @escaping (Value) throws -> NextValue) -> Future<NextValue> {
         return chained { value in
             return try Promise(value: closure(value))
         }

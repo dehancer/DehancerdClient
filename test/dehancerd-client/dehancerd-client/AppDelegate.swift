@@ -9,10 +9,11 @@
 import Cocoa
 import ed25519
 import ObjectMapper
+import DehancerdClient
 
 struct Config {
     
-    static let mode = Session.OpenMode.reuse
+    static let mode = DehancerdClient.Session.OpenMode.reuse
     
     static let url =  URL(string: "http://127.0.0.1:8042/v1/api")!
     
@@ -65,17 +66,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         
                         for i in d {
                             
-                            Swift.print(" list:  ", i.url!)
+                            Swift.print(" list:  ", i.id, i.revision)
                             
                             URLSession(configuration: .default)
                                 .downloadTask(with: i.url!) { localURL, urlResponse, error in
-                                if let localURL = localURL {
-                                    print(localURL)
-                                    if let string = try? String(contentsOf: localURL) {
-                                        //print(string)
+                                    
+                                    print("... urlResponse ", urlResponse)
+                                    
+                                    if let localURL = localURL {
+                                        print(localURL)
+                                        if let string = try? String(contentsOf: localURL) {
+                                            //print(string)
+                                        }
                                     }
-                                }
-                            }.resume()
+                                }.resume()
                         }
                         
                     case .error(let error):
