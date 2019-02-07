@@ -53,41 +53,52 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         api:    Config.accessPair, apiName: Config.accessName
                 )
                 
-                .connect() { error in
+                .authenticate() { error in
                     OperationQueue.main.addOperation {
                         NSAlert(error: error).runModal()
                     }
                     Swift.print("Service connection error:  ", error._code)
                 }
                 
-                .profile_list{ result in
+                .set_user{ result in
+
                     switch result {
                     case .success(let d, _):
-                        
-                        for i in d {
-                            
-                            Swift.print(" list:  ", i.id, i.revision)
-                            
-                            URLSession(configuration: .default)
-                                .downloadTask(with: i.url!) { localURL, urlResponse, error in
-                                    
-                                    print("... urlResponse ", urlResponse)
-                                    
-                                    if let localURL = localURL {
-                                        print(localURL)
-                                        if let string = try? String(contentsOf: localURL) {
-                                            //print(string)
-                                        }
-                                    }
-                                }.resume()
-                        }
-                        
+                        Swift.print("Service profile_list ok:  ", d)
                     case .error(let error):
                         Swift.print("Service profile_list error:  ", error)
-                        
-                        
                     }
-            }
+
+                }
+
+//                .profile_list{ result in
+//                    switch result {
+//                    case .success(let d, _):
+//
+//                        for i in d {
+//
+//                            Swift.print(" list:  ", i.id, i.revision)
+//
+//                            URLSession(configuration: .default)
+//                                .downloadTask(with: i.url!) { localURL, urlResponse, error in
+//
+//                                    print("... urlResponse ", urlResponse)
+//
+//                                    if let localURL = localURL {
+//                                        print(localURL)
+//                                        if let string = try? String(contentsOf: localURL) {
+//                                            //print(string)
+//                                        }
+//                                    }
+//                                }.resume()
+//                        }
+//
+//                    case .error(let error):
+//                        Swift.print("Service profile_list error:  ", error)
+//
+//
+//                    }
+//            }
             
         }
         catch {

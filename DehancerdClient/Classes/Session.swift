@@ -24,7 +24,7 @@ public final class Session {
         self.rpc = JsonRpc(base: url)
     }
     
-    @discardableResult public func connect(error exit:((Error)->())?=nil)  -> Future<Session> {
+    @discardableResult public func authenticate(error exit:((Error)->())?=nil)  -> Future<Session> {
         
         let promise = Promise<Session>()
         
@@ -115,9 +115,115 @@ public final class Session {
     }
     
     fileprivate static let accessTokenKey = "dehancerd-api-access-token"
+    fileprivate let lock = NSLock()
 }
 
 public extension Future where Value: Session {
+    
+    private func check(session: Session,
+                       promise: Promise<Value>,
+                       error error_hanler: @escaping ((Error)->Void), complete: @escaping (()->Void)) {
+        do {
+            
+            let auth = try get_auth_token_request(
+                cuid: session.clientPair.publicKey.encode(),
+                key: session.apiPair.privateKey.encode(),
+                api: session.apiName)
+            
+            session.rpc.send(request: auth) { result  in
+                
+                switch result {
+                case .success(let data,_):
+                    
+                    session.lock.lock()
+                    defer {
+                        session.lock.unlock()
+                    }
+                    
+                    session.accessToken =  data.token
+                    
+                    complete()
+                    
+                case .error(let error):
+                    session.lock.lock()
+                    defer {
+                        session.lock.unlock()
+                    }
+                    session.accessToken = nil
+                    promise.reject(with: error){
+                        error_hanler(error)
+                    }
+                }
+            }
+        }
+        catch {
+            session.accessToken = nil
+            promise.reject(with: error){
+                error_hanler(error)
+            }
+        }
+    }
+    
+    @discardableResult public func set_user(
+        info: UserInfo? = nil,
+        complete:((Result<Bool>) -> ())? = nil) -> Future<Value> {
+        return chained { session in
+            
+            let promise = Promise<Value>()
+            
+            func set_user_info (token: String) {
+                do {
+                    
+                    let user = info != nil ? set_user_info_request(info:info!) : try set_user_info_request(key: session.clientPair.privateKey.encode(), token: token)
+
+                     //let user = try set_user_info_request(key: session.clientPair.privateKey.encode(), token: token)
+                    
+                    session.rpc.send(request: user) { result  in
+                        switch result {
+                            
+                        case .success(let data, let id):
+
+                            promise.resolve(with: session) {
+                                complete?(Result.success(data, id))
+                            }
+                            
+                        case .error(let error):
+                            promise.reject(with: error){
+                                complete?(Result.error(error))
+                            }
+                        }
+                    }
+                }
+                catch {
+                    promise.reject(with: error){
+                        complete?(Result.error(error))
+                    }
+                }
+            }
+            
+            session.lock.lock()
+            defer {
+                session.lock.unlock()
+            }
+            
+            guard let token = session.accessToken else {
+                
+                self.check(session: session,
+                           promise: promise,
+                           error: { error in
+                            complete?(Result.error(error))
+                }){
+                    set_user_info(token: session.accessToken!)
+                }
+                
+                return promise
+            }
+            
+            set_user_info(token: token)
+
+            return promise
+        }
+    }
     
      @discardableResult public func profile_list(complete:((Result<[Profile]>) -> ())? = nil) -> Future<Value> {
         return chained { session in
@@ -153,41 +259,20 @@ public extension Future where Value: Session {
                 
             }
             
+            session.lock.lock()
+            defer {
+                session.lock.unlock()
+            }
+            
             guard let token = session.accessToken else {
 
-                do {
-
-                    let auth = try get_auth_token_request(
-                        cuid: session.clientPair.publicKey.encode(),
-                        key: session.apiPair.privateKey.encode(),
-                        api: session.apiName)
-
-                    session.rpc.send(request: auth) { result  in
-
-                        switch result {
-                        case .success(let data,_):
-
-                            session.accessToken =  data.token
-
-                            get_list(token: session.accessToken!)                        
-
-                        case .error(let error):
-
-                            session.accessToken = nil
-
-                            promise.reject(with: error){
-                                complete?(Result.error(error))
-                            }
-                        }
-                    }
+                self.check(session: session,
+                           promise: promise,
+                           error: { error in
+                            complete?(Result.error(error))
+                }) {
+                    get_list(token: session.accessToken!)
                 }
-                catch {
-                    session.accessToken = nil
-                    promise.reject(with: error){
-                        complete?(Result.error(error))
-                    }
-                }
-
                 return promise
             }
            
