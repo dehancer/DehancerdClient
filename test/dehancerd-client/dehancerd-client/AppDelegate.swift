@@ -63,8 +63,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     
                     session
                         .get_list()
-                        .done{ profile in
-                            debugPrint("Session get_list: ", profile)                    
+                        .done{ profiles in
+                            debugPrint("Session get_list: ")    
+                            for p in profiles {
+                                debugPrint(p.id, p.revision, p.url)                                    
+                            } 
                         }
                         .catch{ error in debugPrint("Session get_list error: ", error) }                                      
                 }
