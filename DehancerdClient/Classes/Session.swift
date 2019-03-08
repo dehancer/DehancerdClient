@@ -8,95 +8,204 @@
 
 import Foundation
 import ed25519
+import PromiseKit
 
 public final class Session {
+    
+    public enum Errors:Error{
+        case timeout(URL)
+        case notAuthorized
+    }
     
     public enum OpenMode {
         case reuse
         case new
     }
     
-    public init(base url:URL, client: Pair, api: Pair, apiName: String) throws {
+    public init(base url:URL, client: Pair, api: Pair, apiName: String, timeout:TimeInterval = 10) throws {
         self.url = url
         self.clientPair = client
         self.apiPair = api
         self.apiName = apiName
+        self.timeout = timeout
         self.rpc = JsonRpc(base: url)
     }
     
-    @discardableResult public func authenticate(error exit:((Error)->())?=nil)  -> Future<Session> {
-        
-        let promise = Promise<Session>()
-        
-        func error_handler(error:Error) {
-            self.accessToken = nil
-            promise.reject(with: error){
-                exit?(error)
+    public func login() -> Promise<Session> {
+        return Promise { promise in
+            
+            after(.seconds(Int(self.timeout)))
+                .done {
+                    return promise.reject(Errors.timeout(self.url))
             }
-        }
-        
-        func get_new_token() {
-            do {
-               
-                let auth = try get_auth_token_request(
-                    cuid: clientPair.publicKey.encode(),
-                    key: apiPair.privateKey.encode(),
-                    api: apiName)
-
-                rpc.send(request: auth) { result  in
-
-                    switch result {
-                        
-                    case .success(let data,_):
-                        self.accessToken =  data.token
-                        promise.resolve(with: self)
-
-                    case .error(let error):
-                       error_handler(error: error)
+            
+            func geNew()  {
+                get_new_token()
+                    .done{ token in
+                        self.accessToken = token
                     }
+                    .catch{ error in
+                        promise.reject(error)
                 }
             }
-            catch {
-                error_handler(error: error)
-            }
-        }
-        
-        func check_state(token: String) {
-            do {
-                let state = try get_cuid_state_request(key: self.clientPair.privateKey.encode(), token: token)
-                
-                self.rpc.send(request: state) { result  in
-                    switch result {
-                    case .success(let permit, _):
-                        
-                        if !permit {
-                            self.accessToken = nil
-                            get_new_token()
-                        }
-                        else {
-                            promise.resolve(with: self)
-                        }
-                        
-                    case .error(let error):
-                        error_handler(error: error)
+            
+            if let token = accessToken {
+                check_state(token: token)
+                    .done{ token in
+                        return promise.fulfill(self)
                     }
-                }
+                    .catch{ errno in
+                        return geNew()
+                    }
             }
-            catch {
-                error_handler(error: error)
+            else {
+               return geNew()
             }
         }
-
-        if let token = accessToken {
-            check_state(token: token)
-        }
-        else {
-            get_new_token()
-        }
-        
-        return promise
     }
     
+    public func set_user_info (info: UserInfo? = nil) -> Promise<Session> {
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+            
+            let user = info != nil ? set_user_info_request(info:info!) : try set_user_info_request(key: self.clientPair.privateKey.encode(), token: token)
+            
+            rpc.send(request: user) { result  in
+                switch result {
+                    
+                case .success(let permit, let id):
+                    
+                    if !permit {
+                        return promise.reject(JsonRpc.Errors.response(responseId: id, 
+                                                                      code: ResponseCode.accessForbidden, 
+                                                                      message: String.localizedStringWithFormat("Access forbidenn")))
+                    }
+                    else {                    
+                        return promise.fulfill(self)
+                    }
+                    
+                case .error(let error):
+                    
+                    return promise.reject(error)
+                    
+                }
+            }
+        }       
+    }
+    
+    public func get_list () -> Promise<[Profile]> {
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+            
+            let list = try get_profile_list_request(key: self.clientPair.privateKey.encode(), token: token)
+            
+            self.rpc.send(request: list) { result  in
+                switch result {
+                    
+                case .success(let data,_):
+                    
+                    return promise.fulfill(data)
+                    
+                case .error(let error):
+                    return promise.reject(error)
+                }
+            }
+        }        
+    }
+    
+    public func update_exports(profile name:String, revision: Int, export count:Int, files:Int) -> Promise<Session> {
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+            
+            let exports = try update_profile_exports_request(key: self.clientPair.privateKey.encode(), 
+                                                             token: token, 
+                                                             profile: name, 
+                                                             revision: revision, 
+                                                             count: count, 
+                                                             files: files) 
+            
+            self.rpc.send(request: exports) { result  in
+                switch result {
+                    
+                case .success(let permit, let id):
+                    
+                    if !permit {
+                        return promise.reject(JsonRpc.Errors.response(responseId: id, 
+                                                                      code: ResponseCode.accessForbidden, 
+                                                                      message: String.localizedStringWithFormat("Access forbidenn")))
+                    }
+                    else {    
+                        return promise.fulfill(self)
+                    }
+                    
+                case .error(let error):
+                    return promise.reject(error)
+                }
+            }            
+        }
+    }
+    
+    private func get_new_token() -> Promise<String> {
+        return Promise { promise in
+            
+            let auth = try get_auth_token_request(
+                cuid: clientPair.publicKey.encode(),
+                key: apiPair.privateKey.encode(),
+                api: apiName)
+                        
+            rpc.send(request: auth) { result  in
+                
+                switch result {
+                    
+                case .success(let data,_):
+
+                    return promise.fulfill(data.token)
+                    
+                case .error(let error):
+                    
+                    return promise.reject(error)
+                    
+                }
+            }
+        }
+    }
+    
+    private func check_state(token: String) -> Promise<String> {
+        
+        return Promise { promise in
+            
+            let state = try get_cuid_state_request(key: self.clientPair.privateKey.encode(), token: token)
+            
+            self.rpc.send(request: state) { result  in
+                switch result {
+                case .success(let permit, let id):
+                    
+                    if !permit {
+                        return promise.reject(JsonRpc.Errors.response(responseId: id, 
+                                                                      code: ResponseCode.accessForbidden, 
+                                                                      message: String.localizedStringWithFormat("Access forbidenn")))
+                    }
+                    else {
+                        return promise.fulfill(token)
+                    }
+                    
+                case .error(let error):
+                    return promise.reject(error)
+                }
+            }   
+        }
+    }
+       
+    fileprivate var timeout:TimeInterval
     fileprivate let rpc:JsonRpc
     fileprivate var urlTask:URLSessionDataTask?
     fileprivate var url:URL
@@ -115,170 +224,4 @@ public final class Session {
     }
     
     fileprivate static let accessTokenKey = "dehancerd-api-access-token"
-    fileprivate let lock = NSLock()
-}
-
-public extension Future where Value: Session {
-    
-    private func check(session: Session,
-                       promise: Promise<Value>,
-                       error error_hanler: @escaping ((Error)->Void), complete: @escaping (()->Void)) {
-        do {
-            
-            let auth = try get_auth_token_request(
-                cuid: session.clientPair.publicKey.encode(),
-                key: session.apiPair.privateKey.encode(),
-                api: session.apiName)
-            
-            session.rpc.send(request: auth) { result  in
-                
-                switch result {
-                case .success(let data,_):
-                    
-                    session.lock.lock()
-                    defer {
-                        session.lock.unlock()
-                    }
-                    
-                    session.accessToken =  data.token
-                    
-                    complete()
-                    
-                case .error(let error):
-                    session.lock.lock()
-                    defer {
-                        session.lock.unlock()
-                    }
-                    session.accessToken = nil
-                    promise.reject(with: error){
-                        error_hanler(error)
-                    }
-                }
-            }
-        }
-        catch {
-            session.accessToken = nil
-            promise.reject(with: error){
-                error_hanler(error)
-            }
-        }
-    }
-    
-    @discardableResult public func set_user(
-        info: UserInfo? = nil,
-        complete:((Result<Bool>) -> ())? = nil) -> Future<Value> {
-        return chained { session in
-            
-            let promise = Promise<Value>()
-            
-            func set_user_info (token: String) {
-                do {
-                    
-                    let user = info != nil ? set_user_info_request(info:info!) : try set_user_info_request(key: session.clientPair.privateKey.encode(), token: token)
-
-                     //let user = try set_user_info_request(key: session.clientPair.privateKey.encode(), token: token)
-                    
-                    session.rpc.send(request: user) { result  in
-                        switch result {
-                            
-                        case .success(let data, let id):
-
-                            promise.resolve(with: session) {
-                                complete?(Result.success(data, id))
-                            }
-                            
-                        case .error(let error):
-                            promise.reject(with: error){
-                                complete?(Result.error(error))
-                            }
-                        }
-                    }
-                }
-                catch {
-                    promise.reject(with: error){
-                        complete?(Result.error(error))
-                    }
-                }
-            }
-            
-            session.lock.lock()
-            defer {
-                session.lock.unlock()
-            }
-            
-            guard let token = session.accessToken else {
-                
-                self.check(session: session,
-                           promise: promise,
-                           error: { error in
-                            complete?(Result.error(error))
-                }){
-                    set_user_info(token: session.accessToken!)
-                }
-                
-                return promise
-            }
-            
-            set_user_info(token: token)
-
-            return promise
-        }
-    }
-    
-     @discardableResult public func profile_list(complete:((Result<[Profile]>) -> ())? = nil) -> Future<Value> {
-        return chained { session in
-            
-            let promise = Promise<Value>()
-            
-            func get_list (token: String) {
-                do {
-                    
-                    let list = try get_profile_list_request(key: session.clientPair.privateKey.encode(), token: token)
-                    
-                    session.rpc.send(request: list) { result  in
-                        switch result {
-                            
-                        case .success(let data, let id):
-                            
-                            promise.resolve(with: session) {
-                                complete?(Result.success(data, id))
-                            }
-                            
-                        case .error(let error):
-                            promise.reject(with: error){
-                                complete?(Result.error(error))
-                            }
-                        }
-                    }
-                }
-                catch {
-                    promise.reject(with: error){
-                        complete?(Result.error(error))
-                    }
-                }
-                
-            }
-            
-            session.lock.lock()
-            defer {
-                session.lock.unlock()
-            }
-            
-            guard let token = session.accessToken else {
-
-                self.check(session: session,
-                           promise: promise,
-                           error: { error in
-                            complete?(Result.error(error))
-                }) {
-                    get_list(token: session.accessToken!)
-                }
-                return promise
-            }
-           
-            get_list(token: token)
-           
-            return promise
-        }
-    }
 }

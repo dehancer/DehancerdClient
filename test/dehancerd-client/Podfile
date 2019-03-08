@@ -10,4 +10,12 @@ target 'dehancerd-client' do
   pod 'ObjectMapper'
   pod 'ed25519', :path => '../../../ed25519cpp'
   pod 'DehancerdClient', :path => '../../'
+  pod 'PromiseKit'
+end
+
+target 'dehancerd-clientTests' do
+  pod 'ObjectMapper'
+  pod 'ed25519', :path => '../../../ed25519cpp'
+  pod 'DehancerdClient', :path => '../../'
+  pod 'PromiseKit'
 end

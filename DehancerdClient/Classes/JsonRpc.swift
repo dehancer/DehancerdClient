@@ -25,7 +25,7 @@ public enum ResponseCode:Int {
 }
 
 public enum Result<T> {
-    case success(T,Int)
+    case success(object:T,responseId:Int)
     case error(Error)
 }
 
@@ -51,6 +51,11 @@ public protocol Request {
 
 
 public class JsonRpc {
+    
+    enum Errors:Error {
+        case response(responseId:Int, code:ResponseCode, message:String)
+        case parse(responseId:Int, code:ResponseCode, message:String)
+    }
     
     public init (base url:URL) {
         self.url = url
@@ -81,7 +86,7 @@ public class JsonRpc {
             URLSession(configuration: .default).dataTask(with: r) {
                 
                 data, response, error in
-                
+                                
                 if let error = error {
                     complete(Result.error(error))
                     return
@@ -97,45 +102,31 @@ public class JsonRpc {
                         if let result = d["result"] {
                             
                             let o:T.ResponseType = try object.response(result)
-                            let r = Result.success(o, retId)
+                            let r = Result.success(object: o, responseId: retId)
                             complete(r)
                             
                          
                         }
-                        else if let e =  d["error"] as? [String: Any] {
-                            
-                            let error = NSError(domain: "com.dehancer.json.rpc",
-                                                code: e["code"] as? Int ?? -1,
-                                                userInfo: [
-                                                    "RequestId": retId,
-                                                    NSLocalizedDescriptionKey :  e["message"] as? String ?? "Unkown error",
-                                                    NSLocalizedFailureReasonErrorKey:
-                                                        String.localizedStringWithFormat("Rpc error")])
-                            
-                            complete(Result.error(error))
+                        else if let e =  d["error"] as? [String: Any] {        
+                            let code = e["code"] as? Int ?? ResponseCode.internalError.rawValue
+                            let responseCode = ResponseCode(rawValue: code) ?? .internalError
+                            complete(Result.error(Errors.response(responseId: retId, 
+                                                                  code:  responseCode, 
+                                                                  message:  e["message"] as? String ?? "Unkown error")))
                         }
                         else {
-                            let error = NSError(domain: "com.dehancer.json.rpc",
-                                                code:  -1,
-                                                userInfo: [
-                                                    "RequestId": retId,
-                                                    NSLocalizedDescriptionKey : "Null responsed data",
-                                                    NSLocalizedFailureReasonErrorKey:
-                                                        String.localizedStringWithFormat("Rpc error")])
-                            complete(Result.error(error))
+                            complete(Result.error(Errors.response(responseId: retId, 
+                                                                  code: ResponseCode.saerverErrorEnd, 
+                                                                  message:  String.localizedStringWithFormat("Null responsed data"))))
                         }
                     }
                     else {
                         let description = String
-                            .localizedStringWithFormat("Response for method %@ could not be parsed", methodName)
+                            .localizedStringWithFormat("Response for method %@ could not be parsed", methodName)               
                         
-                        let e = NSError(domain: "com.dehancer.json.rpc",
-                                        code: -1,
-                                        userInfo: [
-                                            NSLocalizedDescriptionKey : description,
-                                            NSLocalizedFailureReasonErrorKey:
-                                                String.localizedStringWithFormat("Rpc response parser error")])
-                        complete(Result.error(e))
+                        complete(Result.error(Errors.parse(responseId: id, 
+                                                           code: ResponseCode.parseError, 
+                                                           message: description)))
                     }
                 }
                     

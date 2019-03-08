@@ -10,6 +10,7 @@ import Cocoa
 import ed25519
 import ObjectMapper
 import DehancerdClient
+import PromiseKit
 
 struct Config {
     
@@ -31,7 +32,7 @@ struct Config {
     //
     // Client unique id
     //
-    static let cuid = try! Pair(secretPhrase: "dehancerd test client")
+    static let cuid = try! Pair(secretPhrase: "dehancerd test client new")
 }
 
 @NSApplicationMain
@@ -41,72 +42,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        
         Swift.print("Register the follow api access: ")
         Swift.print("                         token: ", Config.accessPair.publicKey.encode())
         Swift.print("                          name: ", Config.accessName)
         
         do {
+            let session = try Session(base: Config.url, 
+                                      client: Config.cuid, 
+                                      api: Config.accessPair, 
+                                      apiName: Config.accessName, 
+                                      timeout: 10)
             
-            try Session(base:   Config.url,
-                        client: Config.cuid,
-                        api:    Config.accessPair, apiName: Config.accessName
-                )
-                
-                .authenticate() { error in
-                    OperationQueue.main.addOperation {
-                        NSAlert(error: error).runModal()
-                    }
-                    Swift.print("Service connection error:  ", error._code)
+            session
+                .login()
+                .then { session -> Promise<Session> in
+                    debugPrint("Session login: ", session)
+                    return session.set_user_info()
+                }                
+                .done { session in
+                    
+                    session
+                        .get_list()
+                        .done{ profile in
+                            debugPrint("Session get_list: ", profile)                    
+                        }
+                        .catch{ error in debugPrint("Session get_list error: ", error) }                                      
                 }
-                
-                .set_user{ result in
-
-                    switch result {
-                    case .success(let d, _):
-                        Swift.print("Service profile_list ok:  ", d)
-                    case .error(let error):
-                        Swift.print("Service profile_list error:  ", error)
-                    }
-
-                }
-
-//                .profile_list{ result in
-//                    switch result {
-//                    case .success(let d, _):
-//
-//                        for i in d {
-//
-//                            Swift.print(" list:  ", i.id, i.revision)
-//
-//                            URLSession(configuration: .default)
-//                                .downloadTask(with: i.url!) { localURL, urlResponse, error in
-//
-//                                    print("... urlResponse ", urlResponse)
-//
-//                                    if let localURL = localURL {
-//                                        print(localURL)
-//                                        if let string = try? String(contentsOf: localURL) {
-//                                            //print(string)
-//                                        }
-//                                    }
-//                                }.resume()
-//                        }
-//
-//                    case .error(let error):
-//                        Swift.print("Service profile_list error:  ", error)
-//
-//
-//                    }
-//            }
+                .catch { error in
+                    debugPrint("Session error: ", error)
+            }
             
+            session
+                .update_exports(profile: "Agfacolor 100", revision: 2, export: 3, files: 100)
+                .catch{ error in
+                    debugPrint("Session error update_exports: ", error)
+                }
         }
         catch {
             OperationQueue.main.addOperation {
                 NSAlert(error: error).runModal()
             }
         }
-    }
+        
+    }    
     
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application

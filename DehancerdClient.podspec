@@ -29,6 +29,7 @@ Pod::Spec.new do |s|
 
   s.dependency 'ed25519'
   s.dependency 'ObjectMapper'
+  s.dependency 'PromiseKit'
   #, :git => 'https://github.com/dnevera/ed25519cpp', :tag => "0.1"
   
 end
