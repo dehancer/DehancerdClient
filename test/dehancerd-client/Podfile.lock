@@ -1,23 +1,41 @@
 PODS:
+  - DehancerdClient (0.3.0):
+    - ed25519
+    - ObjectMapper
+    - PromiseKit
   - ed25519 (0.5.0)
   - ObjectMapper (3.4.2)
+  - PromiseKit (6.8.3):
+    - PromiseKit/CorePromise (= 6.8.3)
+    - PromiseKit/Foundation (= 6.8.3)
+    - PromiseKit/UIKit (= 6.8.3)
+  - PromiseKit/CorePromise (6.8.3)
+  - PromiseKit/Foundation (6.8.3):
+    - PromiseKit/CorePromise
 
 DEPENDENCIES:
+  - DehancerdClient (from `../../`)
   - ed25519 (from `../../../ed25519cpp`)
   - ObjectMapper
+  - PromiseKit
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - ObjectMapper
+    - PromiseKit
 
 EXTERNAL SOURCES:
+  DehancerdClient:
+    :path: "../../"
   ed25519:
     :path: "../../../ed25519cpp"
 
 SPEC CHECKSUMS:
-  ed25519: 364eecae79493dfaacc1f4b6c464118bd5b9c210
+  DehancerdClient: db8381a2f3f3e86763f6f7af3b6fa6af0e3174fe
+  ed25519: d29f5611ef45478aec704d93bfe536f2aff38f2d
   ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
+  PromiseKit: 94c6e781838c5bf4717677d0d882b0e7250c80fc
 
-PODFILE CHECKSUM: bd5c7fef5fa4a978686685bdd961b7940174b78f
+PODFILE CHECKSUM: fa4f92c419b3ebed824d3224db2370c54488646c
 
-COCOAPODS: 1.6.0.beta.2
+COCOAPODS: 1.7.0.beta.1
