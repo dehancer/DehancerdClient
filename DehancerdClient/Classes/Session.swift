@@ -31,7 +31,7 @@ public final class Session {
         self.rpc = JsonRpc(base: url)
     }
     
-    public func login() -> Promise<Session> {
+    public func login(check state:Bool = true) -> Promise<Session> {
         return Promise { promise in
             
             after(.seconds(Int(self.timeout)))
@@ -41,22 +41,28 @@ public final class Session {
             
             func geNew()  {
                 get_new_token()
-                    .done{ token in
+                    .done{ token in                        
                         self.accessToken = token
-                    }
+                        return promise.fulfill(self)
+                    }                    
                     .catch{ error in
-                        promise.reject(error)
+                        return promise.reject(error)
                 }
             }
             
             if let token = accessToken {
-                check_state(token: token)
-                    .done{ token in
-                        return promise.fulfill(self)
+                if state {
+                    check_state(token: token)                      
+                        .done{ token in
+                            return promise.fulfill(self)
+                        }
+                        .catch{ errno in
+                            return geNew()
                     }
-                    .catch{ errno in
-                        return geNew()
-                    }
+                }
+                else {
+                    return promise.fulfill(self)
+                }
             }
             else {
                return geNew()
@@ -205,15 +211,17 @@ public final class Session {
         }
     }
        
-    fileprivate var timeout:TimeInterval
-    fileprivate let rpc:JsonRpc
-    fileprivate var urlTask:URLSessionDataTask?
-    fileprivate var url:URL
-    fileprivate var clientPair:Pair
-    fileprivate var apiName:String
-    fileprivate var apiPair:Pair
+    private var timeout:TimeInterval
+    private let rpc:JsonRpc
+    private var urlTask:URLSessionDataTask?
+    private var url:URL
+    private var clientPair:Pair
+    private var apiName:String
+    private var apiPair:Pair
     
-    fileprivate var accessToken:String? {
+    private let lock = NSLock();
+    
+    private var accessToken:String? {
         set {
             UserDefaults.standard.set(newValue, forKey: Session.accessTokenKey)
             UserDefaults.standard.synchronize()
@@ -223,5 +231,5 @@ public final class Session {
         }
     }
     
-    fileprivate static let accessTokenKey = "dehancerd-api-access-token"
+    private static let accessTokenKey = "dehancerd-api-access-token"
 }

@@ -32,7 +32,7 @@ struct Config {
     //
     // Client unique id
     //
-    static let cuid = try! Pair(secretPhrase: "dehancerd test client new")
+    static let cuid = try! Pair(secretPhrase: "dehancerd test client 6")
 }
 
 @NSApplicationMain
@@ -76,7 +76,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             
             session
-                .update_exports(profile: "Agfacolor 100", revision: 2, export: 3, files: 100)
+                .login(check: false)
+                .done { session in
+                    session
+                        .update_exports(profile: "Agfacolor 100", revision: 2, export: 3, files: 100) 
+                        .catch{ error in
+                            debugPrint("Session error update_exports: ", error)
+                    }
+                }
                 .catch{ error in
                     debugPrint("Session error update_exports: ", error)
                 }
