@@ -1,5 +1,5 @@
 PODS:
-  - DehancerdClient (0.1.0):
+  - DehancerdClient (0.3.0):
     - ed25519
     - ObjectMapper
     - PromiseKit
@@ -31,7 +31,7 @@ EXTERNAL SOURCES:
     :path: "../../../ed25519cpp"
 
 SPEC CHECKSUMS:
-  DehancerdClient: c6d3c61d68d63fff7cce6cfb2d1a61a51d41c334
+  DehancerdClient: db8381a2f3f3e86763f6f7af3b6fa6af0e3174fe
   ed25519: d29f5611ef45478aec704d93bfe536f2aff38f2d
   ObjectMapper: 0d4402610f4e468903ae64629eec4784531e5c51
   PromiseKit: 94c6e781838c5bf4717677d0d882b0e7250c80fc

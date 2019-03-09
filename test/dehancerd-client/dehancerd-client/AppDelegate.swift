@@ -40,11 +40,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var window: NSWindow!
     
-    
+    let downloadManager = DownloadManager()
+
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         Swift.print("Register the follow api access: ")
         Swift.print("                         token: ", Config.accessPair.publicKey.encode())
         Swift.print("                          name: ", Config.accessName)
+        
+
+        downloadManager.onProgress = { progress in
+            debugPrint(" /// onProgress: ", progress)
+        }
+        
+        downloadManager.onDownload = { profile, url in
+            debugPrint(" /// onDownload: ", profile.caption)
+        }
+        
+        downloadManager.onComplete = { error in
+            debugPrint(" /// onComplete: \(String(describing: error))")
+        }
         
         do {
             let session = try Session(base: Config.url, 
@@ -64,10 +78,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     session
                         .get_list()
                         .done{ profiles in
-                            debugPrint("Session get_list: ")    
-                            for p in profiles {
-                                debugPrint(p.id, p.revision, p.url)                                    
-                            } 
+                            
+                            self.downloadManager.add(profiles: profiles)
+                            
                         }
                         .catch{ error in debugPrint("Session get_list error: ", error) }                                      
                 }
