@@ -22,13 +22,15 @@ public final class Session {
         case new
     }
     
+    public let timeout:TimeInterval
+
     public init(base url:URL, client: Pair, api: Pair, apiName: String, timeout:TimeInterval = 10) throws {
         self.url = url
         self.clientPair = client
         self.apiPair = api
         self.apiName = apiName
         self.timeout = timeout
-        self.rpc = JsonRpc(base: url)
+        self.rpc = JsonRpc(base: url, timeout: timeout)
     }
     
     public func login(check state:Bool = true) -> Promise<Session> {
@@ -119,7 +121,9 @@ public final class Session {
                     return promise.fulfill(data)
                     
                 case .error(let error):
+                    
                     return promise.reject(error)
+                    
                 }
             }
         }        
@@ -211,7 +215,6 @@ public final class Session {
         }
     }
        
-    private var timeout:TimeInterval
     private let rpc:JsonRpc
     private var urlTask:URLSessionDataTask?
     private var url:URL

@@ -8,28 +8,42 @@
 import Foundation
 
 public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadDelegate {
-    
+        
     private struct TaskContainer{
         let profile:Profile
         let task:URLSessionDownloadTask
         var totalBytesWritten:Int64 = 0
         var totalBytesExpectedToWrite:Int64 = 0
+        var isDownloaded = false
+        init(profile:Profile,task:URLSessionDownloadTask) {
+            self.profile = profile 
+            self.task = task
+            self.totalBytesExpectedToWrite = Int64(profile.file_size)
+        }
     }    
+    
+    public let timeout:TimeInterval 
     
     public func add(profiles: [Profile]) {
         lock.lock(); defer { lock.unlock() }
         for profile in profiles {
+            
             guard let url = profile.url else { continue }
+            
             let request = URLRequest(url: url, 
-                                     cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, 
-                                     timeoutInterval: 10)
-            let task = session.downloadTask(with: request) //.downloadTask(with: url)
-            tasks[task.taskIdentifier] = TaskContainer(profile: profile, 
-                                                       task: task, 
-                                                       totalBytesWritten: 0, 
-                                                       totalBytesExpectedToWrite: 0)
+                                     cachePolicy: .reloadIgnoringCacheData, 
+                                     timeoutInterval: self.timeout)
+                                    
+            let task = session.downloadTask(with: request)
+            tasks[task.taskIdentifier] = TaskContainer(profile: profile, task: task)
         }
         resume()
+    }
+    
+        
+    public init(timeout:TimeInterval = 60) {        
+        self.timeout = timeout
+        super.init()
     }
     
     private func resume() {
@@ -47,7 +61,7 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
     private lazy var session : URLSession = {
         
         let config:URLSessionConfiguration = URLSessionConfiguration.background(withIdentifier: "\(Bundle.main.bundleIdentifier!).background")
-        
+
         return URLSession(configuration: config,
                           delegate: self,
                           delegateQueue: OperationQueue())
@@ -55,20 +69,22 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
     
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        
+                            
         lock.lock(); defer { lock.unlock() }  
         
         guard tasks.count > 0 else { return }
         
         tasks[downloadTask.taskIdentifier]?.totalBytesWritten = totalBytesWritten
-        tasks[downloadTask.taskIdentifier]?.totalBytesExpectedToWrite = totalBytesExpectedToWrite
         
         let progress = tasks.compactMap { _, task -> CGFloat? in
-            if task.totalBytesExpectedToWrite > 0 {
+            if totalBytesExpectedToWrite > 0 {
+                return CGFloat(task.totalBytesWritten) / CGFloat(totalBytesExpectedToWrite)
+            }
+            else if task.totalBytesExpectedToWrite > 0 {
                 return CGFloat(task.totalBytesWritten) / CGFloat(task.totalBytesExpectedToWrite)
             }
             else {
-                return nil
+                return 1
             }
         }
         
@@ -78,18 +94,22 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         if let profile = tasks[downloadTask.taskIdentifier]?.profile {
+            tasks[downloadTask.taskIdentifier]?.isDownloaded = true
             onDownload?(profile, location)            
         }
     }
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        session.getTasksWithCompletionHandler { (tasks, uploads, downloads) in                        
-            if downloads.count <= 1 {
-                self.lock.lock(); defer { self.lock.unlock() }
-                self.tasks.removeAll()
-                self.onComplete?(nil)
-            }
+        
+        let progress = tasks.compactMap { _, task -> Bool? in 
+            return task.isDownloaded ? true : nil            
         }
+        
+        if progress.count == self.tasks.count && self.tasks.count > 0 {
+            self.lock.lock(); defer { self.lock.unlock() }
+            self.tasks.removeAll()
+            self.onComplete?(nil)
+        }        
         
         if let e = error {
             self.onComplete?(e)

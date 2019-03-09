@@ -16,8 +16,10 @@ struct Config {
     
     static let mode = DehancerdClient.Session.OpenMode.reuse
     
-    static let url =  URL(string: "http://127.0.0.1:8042/v1/api")!
-    
+    //static let url =  URL(string: "http://127.0.0.1:8042/v1/api")!
+    //static let url =  URL(string: "https://165.227.54.8/v1/api")!   
+    static let url =  URL(string: "https://update.dehancer.com/v1/api")!
+
     //
     // Test api access token generator
     // shoild be add in dehancerd db
@@ -65,7 +67,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                       client: Config.cuid, 
                                       api: Config.accessPair, 
                                       apiName: Config.accessName, 
-                                      timeout: 10)
+                                      timeout: 60)
             
             session
                 .login()
@@ -74,25 +76,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     return session.set_user_info()
                 }                
                 .done { session in
-                    
-                    session
-                        .get_list()
-                        .done{ profiles in
-                            
-                            self.downloadManager.add(profiles: profiles)
-                            
-                        }
-                        .catch{ error in debugPrint("Session get_list error: ", error) }                                      
+                                                   
                 }
                 .catch { error in
                     debugPrint("Session error: ", error)
             }
+                                
+            session
+                .get_list()
+                .done{ profiles in
+                    
+                    self.downloadManager.add(profiles: profiles)
+                    
+                }
+                .catch{ error in debugPrint("Session get_list error: ", error) }    
             
             session
                 .login(check: false)
                 .done { session in
                     session
-                        .update_exports(profile: "Agfacolor 100", revision: 2, export: 3, files: 100) 
+                        .update_exports(profile: "Agfacolor 100", revision: 2, export: 1, files: 1) 
                         .catch{ error in
                             debugPrint("Session error update_exports: ", error)
                     }

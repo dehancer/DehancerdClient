@@ -57,8 +57,11 @@ public class JsonRpc {
         case parse(responseId:Int, code:ResponseCode, message:String)
     }
     
-    public init (base url:URL) {
+    let timeout:TimeInterval 
+    
+    public init (base url:URL, timeout:TimeInterval = 60) {
         self.url = url
+        self.timeout = timeout
     }
     
     public func send<T:Request>(request object: T,
@@ -78,7 +81,9 @@ public class JsonRpc {
                         
             let data = try JSONSerialization.data(withJSONObject: json, options: JSONSerialization.WritingOptions.prettyPrinted)
             
-            var r = URLRequest(url: url, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 0)
+            var r = URLRequest(url: url, 
+                               cachePolicy: .reloadIgnoringLocalCacheData,
+                               timeoutInterval: self.timeout)
             
             r.httpMethod = "POST"
             r.httpBody = data
