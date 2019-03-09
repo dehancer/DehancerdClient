@@ -17,6 +17,7 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
     }    
     
     public func add(profiles: [Profile]) {
+        lock.lock(); defer { lock.unlock() }
         for profile in profiles {
             guard let url = profile.url else { continue }
             let request = URLRequest(url: url, 
@@ -55,6 +56,8 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         
+        lock.lock(); defer { lock.unlock() }  
+        
         guard tasks.count > 0 else { return }
         
         tasks[downloadTask.taskIdentifier]?.totalBytesWritten = totalBytesWritten
@@ -82,6 +85,7 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         session.getTasksWithCompletionHandler { (tasks, uploads, downloads) in                        
             if downloads.count <= 1 {
+                self.lock.lock(); defer { self.lock.unlock() }
                 self.tasks.removeAll()
                 self.onComplete?(nil)
             }
@@ -91,4 +95,6 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
             self.onComplete?(e)
         }
     }
+    
+    private let lock = NSLock() 
 }
