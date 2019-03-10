@@ -9,6 +9,7 @@
 import Foundation
 import ed25519
 import PromiseKit
+import ObjectMapper
 
 public final class Session {
     
@@ -112,6 +113,27 @@ public final class Session {
             }
             
             let list = try get_profile_list_request(key: self.clientPair.privateKey.encode(), token: token)
+            
+            self.rpc.send(request: list) { result  in
+                switch result {
+                    
+                case .success(let data,_):
+                    
+                    return promise.fulfill(data)
+                    
+                case .error(let error):
+                    
+                    return promise.reject(error)
+                    
+                }
+            }
+        }        
+    }
+    
+    public func get_statistic (name:String) -> Promise<Mappable> {
+        return Promise { promise in                    
+            
+            let list = get_statistics_request(name: name)
             
             self.rpc.send(request: list) { result  in
                 switch result {

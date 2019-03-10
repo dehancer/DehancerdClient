@@ -69,7 +69,7 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
     
     
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-                            
+                                    
         lock.lock(); defer { lock.unlock() }  
         
         guard tasks.count > 0 else { return }
