@@ -24,7 +24,7 @@ public final class Session {
     
     public let timeout:TimeInterval
 
-    public init(base url:URL, client: Pair, api: Pair, apiName: String, timeout:TimeInterval = 10) throws {
+    public init(base url:URL, client: Pair, api: Pair, apiName: String, timeout:TimeInterval = 10) {
         self.url = url
         self.clientPair = client
         self.apiPair = api

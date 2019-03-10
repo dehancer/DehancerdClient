@@ -22,6 +22,7 @@ public enum ResponseCode:Int {
     case notAuthorized         = -40001
     case accessForbidden       = -40003
     case clientNotRegistered   = -40004
+    case profileNotFound       = -40005
 }
 
 public enum Result<T> {
@@ -52,7 +53,7 @@ public protocol Request {
 
 public class JsonRpc {
     
-    enum Errors:Error {
+    public enum Errors:Error {
         case response(responseId:Int, code:ResponseCode, message:String)
         case parse(responseId:Int, code:ResponseCode, message:String)
     }
@@ -79,19 +80,19 @@ public class JsonRpc {
         
         do {
                         
-            let data = try JSONSerialization.data(withJSONObject: json, options: JSONSerialization.WritingOptions.prettyPrinted)
+            let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
             
             var r = URLRequest(url: url, 
                                cachePolicy: .reloadIgnoringLocalCacheData,
                                timeoutInterval: self.timeout)
             
             r.httpMethod = "POST"
-            r.httpBody = data
+            r.httpBody = data            
             
             URLSession(configuration: .default).dataTask(with: r) {
                 
-                data, response, error in
-                                
+                data, response, error in                         
+                
                 if let error = error {
                     complete(Result.error(error))
                     return
@@ -103,21 +104,21 @@ public class JsonRpc {
                         let d = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
                         
                         let retId = Int("\(d["id"] ?? "-1")") ?? -1
-                        
-                        if let result = d["result"] {
-                            
-                            let o:T.ResponseType = try object.response(result)
-                            let r = Result.success(object: o, responseId: retId)
-                            complete(r)
-                            
-                         
-                        }
-                        else if let e =  d["error"] as? [String: Any] {        
+                                                
+                        if let e =  d["error"] as? [String: Any] {        
                             let code = e["code"] as? Int ?? ResponseCode.internalError.rawValue
                             let responseCode = ResponseCode(rawValue: code) ?? .internalError
                             complete(Result.error(Errors.response(responseId: retId, 
                                                                   code:  responseCode, 
                                                                   message:  e["message"] as? String ?? "Unkown error")))
+                        }
+                        else if let result = d["result"] {
+                            
+                            let o:T.ResponseType = try object.response(result)
+                            let r = Result.success(object: o, responseId: retId)
+                            complete(r)
+                            
+                            
                         }
                         else {
                             complete(Result.error(Errors.response(responseId: retId, 

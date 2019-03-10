@@ -16,9 +16,9 @@ struct Config {
     
     static let mode = DehancerdClient.Session.OpenMode.reuse
     
-    //static let url =  URL(string: "http://127.0.0.1:8042/v1/api")!
+    static let url =  URL(string: "http://127.0.0.1:8042/v1/api")!
     //static let url =  URL(string: "https://165.227.54.8/v1/api")!   
-    static let url =  URL(string: "https://update.dehancer.com/v1/api")!
+    //static let url =  URL(string: "https://update.dehancer.com/v1/api")!
 
     //
     // Test api access token generator
@@ -34,7 +34,7 @@ struct Config {
     //
     // Client unique id
     //
-    static let cuid = try! Pair(secretPhrase: "dehancerd test client 6")
+    static let cuid = try! Pair(secretPhrase: "dehancerd test client")
 }
 
 @NSApplicationMain
