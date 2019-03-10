@@ -66,6 +66,7 @@ public class Profile: Mappable {
     public var url:URL?
     public var datetime:Date?
     public var updated_at:Date?
+    public var file_size:Int = 0 
 
     public required init?(map: Map) {}
     
@@ -78,6 +79,7 @@ public class Profile: Mappable {
         maintainer <- map["maintainer"]
         revision <- map["revision"]
         tags <- map["tags"]
+        file_size <- map["file_size"]
        
         if let context = map.context as? Context {
             url <- (map["url"], SignedURLTransform(context: context))

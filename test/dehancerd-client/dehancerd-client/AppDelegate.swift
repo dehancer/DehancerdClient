@@ -17,7 +17,9 @@ struct Config {
     static let mode = DehancerdClient.Session.OpenMode.reuse
     
     static let url =  URL(string: "http://127.0.0.1:8042/v1/api")!
-    
+    //static let url =  URL(string: "https://165.227.54.8/v1/api")!   
+    //static let url =  URL(string: "https://update.dehancer.com/v1/api")!
+
     //
     // Test api access token generator
     // shoild be add in dehancerd db
@@ -32,7 +34,7 @@ struct Config {
     //
     // Client unique id
     //
-    static let cuid = try! Pair(secretPhrase: "dehancerd test client 6")
+    static let cuid = try! Pair(secretPhrase: "dehancerd test client")
 }
 
 @NSApplicationMain
@@ -43,6 +45,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let downloadManager = DownloadManager()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        Swift.print("Register the follow api access: ")
+        Swift.print("                         token: ", Config.accessPair.publicKey.encode())
+        Swift.print("                          name: ", Config.accessName)
+        
+        let session = Session(base: Config.url, 
+                              client: Config.cuid, 
+                              api: Config.accessPair, 
+                              apiName: Config.accessName, 
+                              timeout: 60)
+        
+        session
+            .get_statistic(name: "common")
+            .done { result in
+                debugPrint("get_statistic: ", result.toJSON())
+            }.catch { error in
+                debugPrint("Session error: ", error)
+        }
+
+    }
+    
+    func applicationDidFinishLaunching__(_ aNotification: Notification) {
         Swift.print("Register the follow api access: ")
         Swift.print("                         token: ", Config.accessPair.publicKey.encode())
         Swift.print("                          name: ", Config.accessName)
@@ -60,52 +83,47 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             debugPrint(" /// onComplete: \(String(describing: error))")
         }
         
-        do {
-            let session = try Session(base: Config.url, 
-                                      client: Config.cuid, 
-                                      api: Config.accessPair, 
-                                      apiName: Config.accessName, 
-                                      timeout: 10)
-            
-            session
-                .login()
-                .then { session -> Promise<Session> in
-                    debugPrint("Session login: ", session)
-                    return session.set_user_info()
-                }                
-                .done { session in
-                    
-                    session
-                        .get_list()
-                        .done{ profiles in
-                            
-                            self.downloadManager.add(profiles: profiles)
-                            
-                        }
-                        .catch{ error in debugPrint("Session get_list error: ", error) }                                      
-                }
-                .catch { error in
-                    debugPrint("Session error: ", error)
+        
+        let session = Session(base: Config.url, 
+                              client: Config.cuid, 
+                              api: Config.accessPair, 
+                              apiName: Config.accessName, 
+                              timeout: 60)
+        
+        session
+            .login()
+            .then { session -> Promise<Session> in
+                debugPrint("Session login: ", session)
+                return session.set_user_info()
+            }                
+            .done { session in
+                
             }
-            
-            session
-                .login(check: false)
-                .done { session in
-                    session
-                        .update_exports(profile: "Agfacolor 100", revision: 2, export: 3, files: 100) 
-                        .catch{ error in
-                            debugPrint("Session error update_exports: ", error)
-                    }
-                }
-                .catch{ error in
-                    debugPrint("Session error update_exports: ", error)
-                }
+            .catch { error in
+                debugPrint("Session error: ", error)
         }
-        catch {
-            OperationQueue.main.addOperation {
-                NSAlert(error: error).runModal()
+        
+        session
+            .get_list()
+            .done{ profiles in
+                
+                self.downloadManager.add(profiles: profiles)
+                
             }
-        }
+            .catch{ error in debugPrint("Session get_list error: ", error) }    
+        
+        session
+            .login(check: false)
+            .done { session in
+                session
+                    .update_exports(profile: "Agfacolor 100", revision: 2, export: 1, files: 1) 
+                    .catch{ error in
+                        debugPrint("Session error update_exports: ", error)
+                }
+            }
+            .catch{ error in
+                debugPrint("Session error update_exports: ", error)
+        }       
         
     }    
     
