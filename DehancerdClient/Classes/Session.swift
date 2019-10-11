@@ -130,6 +130,31 @@ public final class Session {
         }        
     }
     
+    public func get_camera_list () -> Promise<CameraBook> {
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+            
+            let list = try get_camera_list_request(key: self.clientPair.privateKey.encode(), token: token)
+            
+            self.rpc.send(request: list) { result  in
+                switch result {
+                    
+                    case .success(let data,_):
+                        
+                        return promise.fulfill(data)
+                    
+                    case .error(let error):
+                        
+                        return promise.reject(error)
+                    
+                }
+            }
+        }
+    }
+    
     public func get_statistic (name:String) -> Promise<Mappable> {
         return Promise { promise in                    
             

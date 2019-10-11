@@ -44,28 +44,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     let downloadManager = DownloadManager()
 
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        Swift.print("Register the follow api access: ")
-        Swift.print("                         token: ", Config.accessPair.publicKey.encode())
-        Swift.print("                          name: ", Config.accessName)
-        
-        let session = Session(base: Config.url, 
-                              client: Config.cuid, 
-                              api: Config.accessPair, 
-                              apiName: Config.accessName, 
-                              timeout: 60)
-        
-        session
-            .get_statistic(name: "common")
-            .done { result in
-                debugPrint("get_statistic: ", result.toJSON())
-            }.catch { error in
-                debugPrint("Session error: ", error)
-        }
-
-    }
-    
-    func applicationDidFinishLaunching__(_ aNotification: Notification) {
+//    func applicationDidFinishLaunching(_ aNotification: Notification) {
+//        Swift.print("Register the follow api access: ")
+//        Swift.print("                         token: ", Config.accessPair.publicKey.encode())
+//        Swift.print("                          name: ", Config.accessName)
+//
+//        let session = Session(base: Config.url,
+//                              client: Config.cuid,
+//                              api: Config.accessPair,
+//                              apiName: Config.accessName,
+//                              timeout: 60)
+//
+//        session
+//            .get_statistic(name: "common")
+//            .done { result in
+//                debugPrint("get_statistic: ", result.toJSON())
+//            }.catch { error in
+//                debugPrint("Session error: ", error)
+//        }
+//
+//    }
+//
+    func applicationWillFinishLaunching(_ aNotification: Notification) {
         Swift.print("Register the follow api access: ")
         Swift.print("                         token: ", Config.accessPair.publicKey.encode())
         Swift.print("                          name: ", Config.accessName)
@@ -104,10 +104,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         session
-            .get_list()
-            .done{ profiles in
+            .get_camera_list()
+            .done{ cameras in
                 
-                self.downloadManager.add(profiles: profiles)
+                for f in cameras.formats {
+                    Swift.print("Format: ", f.toJSON())
+                }
+                
+                for m in cameras.models {
+                    Swift.print("Model: ", m.toJSON())
+                }
+                
+                for v in cameras.vendors {
+                    Swift.print("Vendor: ", v.toJSON())
+                }
+                
+                
+                //self.downloadManager.add(profiles: profiles)
                 
             }
             .catch{ error in debugPrint("Session get_list error: ", error) }    

@@ -173,11 +173,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1110;
 				ORGANIZATIONNAME = Dehacer;
 				TargetAttributes = {
 					310879372207831000525575 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1110;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
 								enabled = 0;
@@ -186,6 +187,7 @@
 					};
 					310879472207831100525575 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1110;
 						TestTargetID = 310879372207831000525575;
 					};
 				};
@@ -472,6 +474,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = TCA85S5T49;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "dehancerd-client/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -480,7 +483,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Dehancer.dehancerd-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -493,6 +496,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = TCA85S5T49;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "dehancerd-client/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -501,7 +505,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Dehancer.dehancerd-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -522,7 +526,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Dehancer.dehancerd-clientTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dehancerd-client.app/Contents/MacOS/dehancerd-client";
 			};
 			name = Debug;
@@ -544,7 +548,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Dehancer.dehancerd-clientTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/dehancerd-client.app/Contents/MacOS/dehancerd-client";
 			};
 			name = Release;
