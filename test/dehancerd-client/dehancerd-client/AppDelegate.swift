@@ -104,7 +104,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         session
-            .get_camera_list()
+            .get_camera_references()
             .done{ cameras in
                 
                 for f in cameras.formats {

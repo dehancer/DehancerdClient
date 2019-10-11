@@ -85,7 +85,7 @@ public class Models: Mappable {
     }
 }
 
-public class CameraBook: Mappable {
+public class CameraReferences: Mappable {
     
     public var formats:[Format] = []
     public var models:[Models]  = []
@@ -101,11 +101,11 @@ public class CameraBook: Mappable {
     }
 }
 
-internal class get_camera_list_request: Request {
+internal class get_camera_references_request: Request {
     
-    public typealias ResponseType = CameraBook
+    public typealias ResponseType = CameraReferences
 
-    public var method: String  { return "get-camera-list" }
+    public var method: String  { return "get-camera-references" }
     public var params: Params? { return _params }
     
     public class ParamsHelper: Params {
@@ -135,7 +135,7 @@ internal class get_camera_list_request: Request {
     
     public func response<R>(_ object: ResponsObject) throws -> R  {
         if let o = object as? [String : Any] {
-            return Mapper<CameraBook>( context: Context(cuid: _params.cuid, signature: _params.signature),
+            return Mapper<CameraReferences>( context: Context(cuid: _params.cuid, signature: _params.signature),
                                     shouldIncludeNilValues: true).map(JSON: o) as! R
         }
         throw JsonRpc.Errors.parse(responseId: -1, code: ResponseCode.parseError, message: "Unknown response object type")

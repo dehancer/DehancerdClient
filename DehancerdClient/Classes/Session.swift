@@ -130,14 +130,14 @@ public final class Session {
         }        
     }
     
-    public func get_camera_list () -> Promise<CameraBook> {
+    public func get_camera_references () -> Promise<CameraReferences> {
         return Promise { promise in
             
             guard let token = self.accessToken else {
                 return promise.reject(Errors.notAuthorized)
             }
             
-            let list = try get_camera_list_request(key: self.clientPair.privateKey.encode(), token: token)
+            let list = try get_camera_references_request(key: self.clientPair.privateKey.encode(), token: token)
             
             self.rpc.send(request: list) { result  in
                 switch result {
