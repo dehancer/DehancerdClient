@@ -9,7 +9,7 @@ import Foundation
 import ObjectMapper
 import ed25519
 
-public class Vendors: Mappable {
+public class Vendor: Mappable {
     public var          id = ""
     public var        name = ""
     public var    caption  = ""
@@ -45,7 +45,7 @@ public class Format: Mappable {
     }
 }
 
-public class CameraProfile: Mappable {
+public class CameraProfileReference: Mappable {
     
     public var   format_id = ""
     public var     url:URL?
@@ -63,12 +63,12 @@ public class CameraProfile: Mappable {
     }
 }
 
-public class Models: Mappable {
+public class Model: Mappable {
     public var description = ""
     public var          id = ""
     public var        name = ""
     public var     caption = ""
-    public var   profiles:[CameraProfile] = []
+    public var   profiles:[CameraProfileReference] = []
     public var  formats:[String] = []
     public var   vendor_id = ""
     
@@ -88,8 +88,8 @@ public class Models: Mappable {
 public class CameraReferences: Mappable {
     
     public var formats:[Format] = []
-    public var models:[Models]  = []
-    public var vendors:[Vendors]  = []
+    public var models:[Model]  = []
+    public var vendors:[Vendor]  = []
 
     public required init?(map: Map) {}
     

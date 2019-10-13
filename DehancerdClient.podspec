@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "DehancerdClient"
-  s.version      = "0.3.1"
+  s.version      = "0.4.0"
   s.summary      = "Dehancerd services client"
   s.description  = "Dehancerd services client"
 
@@ -23,13 +23,14 @@ Pod::Spec.new do |s|
 
   s.source_files  = "DehancerdClient/Classes/**/*.{swift}",
 
-  s.frameworks = "Foundation"
+  s.frameworks = "Foundation", "DehancerCommon"
 
   s.requires_arc = true
 
   s.dependency 'ed25519'
   s.dependency 'ObjectMapper'
   s.dependency 'PromiseKit'
+  s.dependency 'DehancerCommon'
   #, :git => 'https://github.com/dnevera/ed25519cpp', :tag => "0.1"
   
 end

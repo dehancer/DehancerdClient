@@ -1,29 +1,27 @@
 //
-//  update-profile-exports.swift
+//  upload-camera-profile.swift
 //  DehancerdClient
 //
-//  Created by denis svinarchuk on 08/03/2019.
+//  Created by denn nevera on 12/10/2019.
 //
 
 import Foundation
 import ObjectMapper
 import ed25519
 
-public class update_profile_exports_request: Request {
+public class upload_camera_profile_request: Request {
     
     public typealias ResponseType = Bool
     
-    public var method: String  { return "update-profile-exports" }
+    public var method: String  { return "upload-camera-profile" }
     public var params: Params? { return _params }
     
     public class ParamsHelper: Params {
         
         public var cuid:String = ""
         public var signature:String = ""
-        public var name:String = ""
-        public var revision:Int = 0
-        public var count:Int = 0
-        public var files:Int = 0
+        public var id:String = ""
+        public var data:String = ""
         
         override public func mapping(map: Map) {
             super.mapping(map: map)
@@ -31,10 +29,8 @@ public class update_profile_exports_request: Request {
             cuid           <- map["cuid"]
             signature      <- map["signature"]
             
-            name           <- map["name"]
-            revision       <- map["revision"]
-            count          <- map["count"]
-            files          <- map["files"]
+            id           <- map["id"]
+            data           <- map["data"]
         }
     }
     
@@ -42,10 +38,8 @@ public class update_profile_exports_request: Request {
         key client_private_key: String,
         token: String,
         
-        profile name: String,
-        revision: Int,
-        count: Int,
-        files: Int
+        profile id: String,
+        data: String
         ) throws {
         
         let pair = try Pair(fromPrivateKey: client_private_key)
@@ -58,10 +52,8 @@ public class update_profile_exports_request: Request {
         _params.signature = pair.sign(digest).encode()
         _params.cuid = pair.publicKey.encode()
         
-        _params.name = name 
-        _params.revision = revision 
-        _params.count = count
-        _params.files = files       
+        _params.id = id
+        _params.data = data
     }
     
     public func response<R>(_ object: ResponsObject) throws -> R  {

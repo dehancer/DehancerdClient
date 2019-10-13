@@ -10,6 +10,7 @@ import Cocoa
 import ed25519
 import ObjectMapper
 import DehancerdClient
+//import DehancerCommon
 import PromiseKit
 
 struct Config {
@@ -76,7 +77,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         downloadManager.onDownload = { profile, url in
-            debugPrint(" /// onDownload: ", profile.caption)
+            if let p = profile as? Profile {
+                debugPrint(" /// film onDownload: ", p.caption)
+            }
+            else if let p = profile as? CameraProfile {
+                debugPrint(" /// camera onDownload: ", p.caption)
+            }
         }
         
         downloadManager.onComplete = { error in
@@ -90,54 +96,125 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                               apiName: Config.accessName, 
                               timeout: 60)
         
+//        session
+//            .login()
+//            .then { session -> Promise<Session> in
+//                debugPrint("Session login: ", session)
+//                return session.set_user_info()
+//        }
+//        .done { session in
+//
+//            session
+//                .get_film_profile_list()
+//                .done{ profiles in
+//
+//                    self.downloadManager.add(profiles: profiles)
+//
+//            }
+//            .catch{ error in debugPrint("Session get_list error: ", error) }
+//        }
+//        .catch { error in
+//            debugPrint("Session error: ", error)
+//        }
+
+//        session
+//            .login()
+//            .then { session -> Promise<Session> in
+//                debugPrint("Session login: ", session)
+//                return session.set_user_info()
+//            }
+//            .done { session in
+//
+//            }
+//            .catch { error in
+//                debugPrint("Session error: ", error)
+//        }
+        
+//        var base64 = "Some data".data(using: .utf8)?.base64EncodedString() ?? ""
+//
+//        session
+//            .upload_camera_profile(profile: "Test", data: base64)
+//            .done{ session in
+//
+//        }
+//        .catch{ error in debugPrint("Session get_list error: ", error) }
+            
+        
+//        session
+//            .login()
+//            .then { session -> Promise<Session> in
+//                debugPrint("Session login: ", session)
+//                return session.set_user_info()
+//        }
+//        .done { session in
+//
+//            session
+//                .get_camera_profile_list(all:true)
+//                .done{ profiles in
+//
+//                    for p in profiles {
+//                        Swift.print(p.toJSON())
+//                    }
+//
+//                    self.downloadManager.add(profiles: profiles)
+//
+//            }
+//            .catch{ error in debugPrint("Session get_list error: ", error) }
+//        }
+//        .catch { error in
+//            debugPrint("Session error: ", error)
+//        }
+//
+        
+//        session
+//            .get_camera_references()
+//            .done{ cameras in
+//
+//                for f in cameras.formats {
+//                    Swift.print("Format: ", f.toJSON())
+//                }
+//
+//                for m in cameras.models {
+//                    Swift.print("Model: ", m.toJSON())
+//                }
+//
+//                for v in cameras.vendors {
+//                    Swift.print("Vendor: ", v.toJSON())
+//                }
+//
+//
+//            }
+//            .catch{ error in debugPrint("Session get_list error: ", error) }
+
+        
         session
             .login()
-            .then { session -> Promise<Session> in
-                debugPrint("Session login: ", session)
-                return session.set_user_info()
-            }                
-            .done { session in
-                
-            }
-            .catch { error in
-                debugPrint("Session error: ", error)
-        }
-        
-        session
-            .get_camera_references()
-            .done{ cameras in
-                
-                for f in cameras.formats {
-                    Swift.print("Format: ", f.toJSON())
-                }
-                
-                for m in cameras.models {
-                    Swift.print("Model: ", m.toJSON())
-                }
-                
-                for v in cameras.vendors {
-                    Swift.print("Vendor: ", v.toJSON())
-                }
-                
-                
-                //self.downloadManager.add(profiles: profiles)
-                
-            }
-            .catch{ error in debugPrint("Session get_list error: ", error) }    
-        
-        session
-            .login(check: false)
             .done { session in
                 session
-                    .update_exports(profile: "Agfacolor 100", revision: 2, export: 1, files: 1) 
+                    .update_camera_profile(profile: "Apple-8_8S_8P-FiLMiC_Pro_Log_V2",
+                                           is_published: false)
                     .catch{ error in
                         debugPrint("Session error update_exports: ", error)
                 }
-            }
-            .catch{ error in
-                debugPrint("Session error update_exports: ", error)
-        }       
+        }
+        .catch{ error in
+            debugPrint("Session error update_exports: ", error)
+        }
         
+        
+//        session
+//            .login(check: false)
+//            .done { session in
+//                session
+//                    .update_exports(profile: "Agfacolor 100", revision: 2, export: 1, files: 1)
+//                    .catch{ error in
+//                        debugPrint("Session error update_exports: ", error)
+//                }
+//            }
+//            .catch{ error in
+//                debugPrint("Session error update_exports: ", error)
+//        }
+//
     }    
     
     func applicationWillTerminate(_ aNotification: Notification) {

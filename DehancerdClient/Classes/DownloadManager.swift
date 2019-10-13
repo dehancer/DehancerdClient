@@ -7,10 +7,19 @@
 
 import Foundation
 
+public protocol TaskContainerProtocol {
+    var profile:Any {get}
+    var task:URLSessionDownloadTask { get }
+    var totalBytesWritten:Int64 { get set }
+    var totalBytesExpectedToWrite:Int64 { get set }
+    var isDownloaded:Bool { get set }
+}
+
 public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadDelegate {
         
-    private struct TaskContainer{
-        let profile:Profile
+   
+    private struct TaskContainer: TaskContainerProtocol{
+        let profile:Any
         let task:URLSessionDownloadTask
         var totalBytesWritten:Int64 = 0
         var totalBytesExpectedToWrite:Int64 = 0
@@ -20,7 +29,20 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
             self.task = task
             self.totalBytesExpectedToWrite = Int64(profile.file_size)
         }
-    }    
+    }
+    
+    private struct TaskCameraContainer: TaskContainerProtocol{
+           let profile:Any
+           let task:URLSessionDownloadTask
+           var totalBytesWritten:Int64 = 0
+           var totalBytesExpectedToWrite:Int64 = 0
+           var isDownloaded = false
+           init(profile:CameraProfile,task:URLSessionDownloadTask) {
+               self.profile = profile
+               self.task = task
+               self.totalBytesExpectedToWrite = Int64(profile.file_size)
+           }
+       }
     
     public let timeout:TimeInterval 
     
@@ -40,6 +62,22 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
         resume()
     }
     
+    public func add(profiles: [CameraProfile]) {
+           lock.lock(); defer { lock.unlock() }
+           for profile in profiles {
+               
+               guard let url = profile.url else { continue }
+               
+               let request = URLRequest(url: url,
+                                        cachePolicy: .reloadIgnoringCacheData,
+                                        timeoutInterval: self.timeout)
+                                       
+               let task = session.downloadTask(with: request)
+               tasks[task.taskIdentifier] = TaskCameraContainer(profile: profile, task: task)
+           }
+           resume()
+       }
+    
         
     public init(timeout:TimeInterval = 60) {        
         self.timeout = timeout
@@ -53,10 +91,10 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
     }
     
     public var onProgress: ((_ progress:CGFloat) -> ())? = nil
-    public var onDownload: ((_ profile:Profile, _ location:URL) -> ())? = nil
+    public var onDownload: ((_ profile:Any, _ location:URL) -> ())? = nil
     public var onComplete: ((_ error:Error?) -> ())? = nil
     
-    private var tasks:[Int:TaskContainer] = [:]
+    private var tasks:[Int:TaskContainerProtocol] = [:]
     
     private lazy var session : URLSession = {
         
@@ -88,7 +126,13 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
             }
         }
         
-        onProgress?(progress.reduce(0.0, +)/CGFloat(tasks.count))
+        if tasks.count == 0 {
+            onProgress?(1.0)
+        }
+        else {
+            let p = progress.reduce(0.0, +)/CGFloat(tasks.count)
+            onProgress?(p >= 0.999 ? 1 : p)
+        }
     }
     
     
@@ -105,7 +149,7 @@ public class DownloadManager : NSObject, URLSessionDelegate, URLSessionDownloadD
             return task.isDownloaded ? true : nil            
         }
         
-        if progress.count == self.tasks.count && self.tasks.count > 0 {
+        if progress.count == self.tasks.count && self.tasks.count > 0  || self.tasks.count == 0{
             self.lock.lock(); defer { self.lock.unlock() }
             self.tasks.removeAll()
             self.onComplete?(nil)

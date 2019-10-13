@@ -1,5 +1,7 @@
 PODS:
-  - DehancerdClient (0.3.1):
+  - DehancerCommon (0.2.1)
+  - DehancerdClient (0.4.0):
+    - DehancerCommon
     - ed25519
     - ObjectMapper
     - PromiseKit
@@ -14,6 +16,7 @@ PODS:
     - PromiseKit/CorePromise
 
 DEPENDENCIES:
+  - DehancerCommon (from `../../../../Dehancer-Plugins/dehancer-common-cpp`)
   - DehancerdClient (from `../../`)
   - ed25519 (from `../../../ed25519cpp`)
   - ObjectMapper
@@ -25,17 +28,20 @@ SPEC REPOS:
     - PromiseKit
 
 EXTERNAL SOURCES:
+  DehancerCommon:
+    :path: "../../../../Dehancer-Plugins/dehancer-common-cpp"
   DehancerdClient:
     :path: "../../"
   ed25519:
     :path: "../../../ed25519cpp"
 
 SPEC CHECKSUMS:
-  DehancerdClient: 449acbcccb8d11c1e6f017685de8840a94379651
+  DehancerCommon: 0360b956d87497920d77a76145ec5182617db28a
+  DehancerdClient: 8c2b250f9584292a17c98a5e014082a92f65185e
   ed25519: d29f5611ef45478aec704d93bfe536f2aff38f2d
   ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
   PromiseKit: e4863d06976e7dee5e41c04fc7371c16b3600292
 
-PODFILE CHECKSUM: fa4f92c419b3ebed824d3224db2370c54488646c
+PODFILE CHECKSUM: bf6bf3690b7f24026d43e0380766b2c1ab821410
 
 COCOAPODS: 1.7.0.beta.2
