@@ -246,7 +246,7 @@ public final class Session {
         }
     }
     
-    public func upload_camera_profile(profile id:String, data: String) -> Promise<Session> {
+    public func upload_camera_profile(data: String) -> Promise<Session> {
         return Promise { promise in
             
             guard let token = self.accessToken else {
@@ -255,7 +255,6 @@ public final class Session {
             
             let exports = try upload_camera_profile_request(key: self.clientPair.privateKey.encode(),
                                                              token: token,
-                                                             profile: id,
                                                              data: data)
             
             self.rpc.send(request: exports) { result  in

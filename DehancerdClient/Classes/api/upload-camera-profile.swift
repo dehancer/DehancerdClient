@@ -20,7 +20,6 @@ public class upload_camera_profile_request: Request {
         
         public var cuid:String = ""
         public var signature:String = ""
-        public var id:String = ""
         public var data:String = ""
         
         override public func mapping(map: Map) {
@@ -28,17 +27,13 @@ public class upload_camera_profile_request: Request {
             
             cuid           <- map["cuid"]
             signature      <- map["signature"]
-            
-            id           <- map["id"]
             data           <- map["data"]
         }
     }
     
     public init(
         key client_private_key: String,
-        token: String,
-        
-        profile id: String,
+        token: String,        
         data: String
         ) throws {
         
@@ -51,8 +46,6 @@ public class upload_camera_profile_request: Request {
         
         _params.signature = pair.sign(digest).encode()
         _params.cuid = pair.publicKey.encode()
-        
-        _params.id = id
         _params.data = data
     }
     
