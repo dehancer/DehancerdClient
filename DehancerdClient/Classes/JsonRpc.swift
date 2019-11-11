@@ -83,7 +83,7 @@ public class JsonRpc {
             let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
             
             var r = URLRequest(url: url, 
-                               cachePolicy: .reloadIgnoringLocalCacheData,
+                               cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                timeoutInterval: self.timeout)
             
             r.httpMethod = "POST"

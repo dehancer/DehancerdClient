@@ -105,29 +105,131 @@ public final class Session {
         }       
     }
     
+    @available(*, deprecated, message: "Use instead: get_film_profile_list")
     public func get_list () -> Promise<[Profile]> {
+       return get_film_profile_list()
+    }
+    
+    public func get_film_profile_list () -> Promise<[Profile]> {
         return Promise { promise in
             
             guard let token = self.accessToken else {
                 return promise.reject(Errors.notAuthorized)
             }
             
-            let list = try get_profile_list_request(key: self.clientPair.privateKey.encode(), token: token)
+            let list = try get_film_profile_list_request(key: self.clientPair.privateKey.encode(), token: token)
             
             self.rpc.send(request: list) { result  in
                 switch result {
                     
-                case .success(let data,_):
+                    case .success(let data,_):
+                        
+                        return promise.fulfill(data)
                     
-                    return promise.fulfill(data)
-                    
-                case .error(let error):
-                    
-                    return promise.reject(error)
+                    case .error(let error):
+                        
+                        return promise.reject(error)
                     
                 }
             }
-        }        
+        }
+    }
+    
+    public func get_camera_profile_list (id:String="", all:Bool = false) -> Promise<[CameraProfile]> {
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+            
+            let list = try get_camera_profile_list_request(
+                key: self.clientPair.privateKey.encode(),
+                token: token,
+                id: id,
+                all: all
+            )
+            
+            self.rpc.send(request: list) { result  in
+                switch result {
+                    
+                    case .success(let data,_):
+                        
+                        return promise.fulfill(data)
+                    
+                    case .error(let error):
+                        
+                        return promise.reject(error)
+                    
+                }
+            }
+        }
+    }
+    
+    public func get_camera_references () -> Promise<CameraReferences> {
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+            
+            let list = try get_camera_references_request(key: self.clientPair.privateKey.encode(), token: token)
+            
+            self.rpc.send(request: list) { result  in
+                switch result {
+                    
+                    case .success(let data,_):
+                        
+                        return promise.fulfill(data)
+                    
+                    case .error(let error):
+                        
+                        return promise.reject(error)
+                    
+                }
+            }
+        }
+    }
+    
+    public func update_camera_reference (
+        vendor:Vendor? = nil,
+        model:Model? = nil,
+        format:Format? = nil) -> Promise<Session> {
+        
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+                                    
+            let ref = try update_camera_reference_request(
+                key: self.clientPair.privateKey.encode(),
+                token: token,
+                vendor: vendor,
+                model: model,
+                format:format
+            )
+
+            self.rpc.send(request: ref) { result  in
+                switch result {
+
+                    case .success(let permit, let id):
+                        
+                        if !permit {
+                            return promise.reject(JsonRpc.Errors.response(responseId: id,
+                                                                          code: ResponseCode.accessForbidden,
+                                                                          message: String.localizedStringWithFormat("Access forbidenn")))
+                        }
+                        else {
+                            return promise.fulfill(self)
+                    }
+                    
+                    case .error(let error):
+
+                        return promise.reject(error)
+
+                }
+            }
+        }
     }
     
     public func get_statistic (name:String) -> Promise<Mappable> {
@@ -183,6 +285,71 @@ public final class Session {
                     return promise.reject(error)
                 }
             }            
+        }
+    }
+    
+    public func upload_camera_profile(data: String) -> Promise<Session> {
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+            
+            let exports = try upload_camera_profile_request(key: self.clientPair.privateKey.encode(),
+                                                             token: token,
+                                                             data: data)
+            
+            self.rpc.send(request: exports) { result  in
+                switch result {
+                    
+                case .success(let permit, let id):
+                    
+                    if !permit {
+                        return promise.reject(JsonRpc.Errors.response(responseId: id,
+                                                                      code: ResponseCode.accessForbidden,
+                                                                      message: String.localizedStringWithFormat("Access forbidenn")))
+                    }
+                    else {
+                        return promise.fulfill(self)
+                    }
+                    
+                case .error(let error):
+                    return promise.reject(error)
+                }
+            }
+        }
+    }
+    
+    public func update_camera_profile(profile id:String, is_published: Bool) -> Promise<Session> {
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+            
+            let exports = try update_camera_profile_request(key: self.clientPair.privateKey.encode(),
+                                                             token: token,
+                                                             profile: id,
+                                                             is_published: is_published)
+            
+            self.rpc.send(request: exports) { result  in
+                switch result {
+                    
+                case .success(let permit, let id):
+                    
+                    if !permit {
+                        return promise.reject(JsonRpc.Errors.response(responseId: id,
+                                                                      code: ResponseCode.accessForbidden,
+                                                                      message: String.localizedStringWithFormat("Access forbidenn")))
+                    }
+                    else {
+                        return promise.fulfill(self)
+                    }
+                    
+                case .error(let error):
+                    return promise.reject(error)
+                }
+            }
         }
     }
     

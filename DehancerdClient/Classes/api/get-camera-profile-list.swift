@@ -1,60 +1,18 @@
 //
-//  get-profile-list.swift
-//  dehancerd-client
+//  get-camera-profile-list.swift
+//  DehancerdClient
 //
-//  Created by denn on 05/02/2019.
-//  Copyright © 2019 Dehacer. All rights reserved.
+//  Created by denn nevera on 13/10/2019.
 //
+
+import Foundation
 
 import Foundation
 import ObjectMapper
 import ed25519
+import DehancerCommon
 
-fileprivate struct Context: MapContext {
-    public var cuid:String = ""
-    public var signature:String = ""
-}
-
-extension String {
-    mutating func appendItem(_ item: String, value:String)  {
-        self.append(item)
-        self.append("=")
-        self.append(value)
-    }
-}
-
-fileprivate class SignedURLTransform: TransformType {
-    public typealias Object = URL
-    public typealias JSON = String
-    private let context: Context
-    
-    public init(context: Context) {
-        self.context = context
-    }
-
-    open func transformFromJSON(_ value: Any?) -> URL? {
-        guard var URLString = value as? String else { return nil }
-        
-        URLString.append("?")
-        URLString.appendItem("cuid", value: context.cuid)
-        URLString.append("&")
-        URLString.appendItem("signature", value: context.signature)
-
-        guard let escapedURLString = URLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            return nil
-        }
-        return URL(string: escapedURLString)
-    }
-    
-    open func transformToJSON(_ value: URL?) -> String? {
-        if let URL = value {
-            return URL.absoluteString
-        }
-        return nil
-    }
-}
-
-public class Profile: Mappable {
+public class CameraProfile: Mappable {
     
     public var author = ""
     public var caption = ""
@@ -66,7 +24,14 @@ public class Profile: Mappable {
     public var url:URL?
     public var datetime:Date?
     public var updated_at:Date?
-    public var file_size:Int = 0 
+    public var file_size:Int = 0
+    public var is_photo_enabled:Bool = false
+    public var is_video_enabled:Bool = false
+    public var is_published:Bool = false
+    public var license_matrix:[LicenseType] = []
+    public var vendor_id:String = ""
+    public var model_id:String = ""
+    public var format_id:String = ""
 
     public required init?(map: Map) {}
     
@@ -79,8 +44,14 @@ public class Profile: Mappable {
         maintainer <- map["maintainer"]
         revision <- map["revision"]
         tags <- map["tags"]
-        file_size <- map["file_size"]
-       
+        is_photo_enabled <- map["is_photo_enabled"]
+        is_video_enabled <- map["is_video_enabled"]
+        is_published <- map["is_published"]
+        license_matrix <- map["license_matrix"]
+        vendor_id <- map["vendor_id"]
+        model_id <- map["model_id"]
+        format_id <- map["format_id"]
+
         if let context = map.context as? Context {
             url <- (map["url"], SignedURLTransform(context: context))
         }
@@ -93,26 +64,34 @@ public class Profile: Mappable {
     }
 }
 
-internal class get_profile_list_request: Request {
+internal class get_camera_profile_list_request: Request {
     
-    public typealias ResponseType = [Profile]
+    public typealias ResponseType = [CameraProfile]
 
-    public var method: String  { return "get-profile-list" }
+    public var method: String  { return "get-camera-profile-list" }
     public var params: Params? { return _params }
     
     public class ParamsHelper: Params {
         
         public var cuid:String = ""
         public var signature:String = ""
-        
+        public var id:String = ""
+        public var all = false
+
         override public func mapping(map: Map) {
             super.mapping(map: map)
             cuid <- map["cuid"]
             signature <- map["signature"]
+            id <- map["id"]
+            all <- map["all"]
         }
     }
     
-    public init(key client_private_key: String, token: String) throws {
+    public init(key client_private_key: String,
+                token: String,
+                id: String = "",
+                all: Bool = false
+    ) throws {
         
         let pair = try Pair(fromPrivateKey: client_private_key)
         
@@ -121,13 +100,15 @@ internal class get_profile_list_request: Request {
             calculator.append(pair.publicKey.encode())
         }
 
-        _params.signature = pair.sign(digest).encode() 
+        _params.signature = pair.sign(digest).encode()
         _params.cuid = pair.publicKey.encode()
+        _params.id = id
+        _params.all = all
     }
     
     public func response<R>(_ object: ResponsObject) throws -> R  {
         return
-            Mapper<Profile>(context: Context(cuid: _params.cuid, signature: _params.signature),
+            Mapper<CameraProfile>(context: Context(cuid: _params.cuid, signature: _params.signature),
                             shouldIncludeNilValues: true)
             .mapArray(JSONObject: object) as! R
         

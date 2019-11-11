@@ -10,6 +10,7 @@ target 'dehancerd-client' do
   pod 'ObjectMapper'
   pod 'ed25519', :path => '../../../ed25519cpp'
   pod 'DehancerdClient', :path => '../../'
+  pod 'DehancerCommon', :path => '../../../../Dehancer-Plugins/dehancer-common-cpp'
   pod 'PromiseKit'
 end
 
