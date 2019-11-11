@@ -190,6 +190,48 @@ public final class Session {
         }
     }
     
+    public func update_camera_reference (
+        vendor:Vendor? = nil,
+        model:Model? = nil,
+        format:Format? = nil) -> Promise<Session> {
+        
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+                                    
+            let ref = try update_camera_reference_request(
+                key: self.clientPair.privateKey.encode(),
+                token: token,
+                vendor: vendor,
+                model: model,
+                format:format
+            )
+
+            self.rpc.send(request: ref) { result  in
+                switch result {
+
+                    case .success(let permit, let id):
+                        
+                        if !permit {
+                            return promise.reject(JsonRpc.Errors.response(responseId: id,
+                                                                          code: ResponseCode.accessForbidden,
+                                                                          message: String.localizedStringWithFormat("Access forbidenn")))
+                        }
+                        else {
+                            return promise.fulfill(self)
+                    }
+                    
+                    case .error(let error):
+
+                        return promise.reject(error)
+
+                }
+            }
+        }
+    }
+    
     public func get_statistic (name:String) -> Promise<Mappable> {
         return Promise { promise in                    
             

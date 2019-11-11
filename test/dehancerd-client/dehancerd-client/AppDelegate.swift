@@ -45,17 +45,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     let downloadManager = DownloadManager()
 
-//    func applicationDidFinishLaunching(_ aNotification: Notification) {
-//        Swift.print("Register the follow api access: ")
-//        Swift.print("                         token: ", Config.accessPair.publicKey.encode())
-//        Swift.print("                          name: ", Config.accessName)
-//
-//        let session = Session(base: Config.url,
-//                              client: Config.cuid,
-//                              api: Config.accessPair,
-//                              apiName: Config.accessName,
-//                              timeout: 60)
-//
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+      
+        Swift.print("Register the follow api access: ")
+        Swift.print("                         token: ", Config.accessPair.publicKey.encode())
+        Swift.print("                          name: ", Config.accessName)
+
+        let session = Session(base: Config.url,
+                              client: Config.cuid,
+                              api: Config.accessPair,
+                              apiName: Config.accessName,
+                              timeout: 60)
+
 //        session
 //            .get_statistic(name: "common")
 //            .done { result in
@@ -63,38 +64,69 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //            }.catch { error in
 //                debugPrint("Session error: ", error)
 //        }
-//
-//    }
-//
-    func applicationWillFinishLaunching(_ aNotification: Notification) {
-        Swift.print("Register the follow api access: ")
-        Swift.print("                         token: ", Config.accessPair.publicKey.encode())
-        Swift.print("                          name: ", Config.accessName)
         
+        session
+            .login()
+            .then { session -> Promise<Session> in
+                debugPrint("Session login: ", session)
+                return session.set_user_info()
+        }
+        .then { session -> Promise<Session> in
+                        
+            let vendor = Vendor(name: "Arri")
+            
+            vendor.caption = "ARRI AG"
+            vendor.description = "ARRI Media International is a department of the worldwide established ARRI Group and operates as an international sales agent for feature films. Our main genre focus when acquiring for worldwide distribution is on FAMILY ENTERTAINMENT (live action & full animation), DRAMAS (prestigious festival contenders) and GENRE (horror, thriller, action and sci-fi)."
+            
+            let model = Model(vendor: vendor.id, name: "Alexa LF")
+            model.description = "ARRI is a large-format camera system consists of the ALEXA LF camera, ARRI Signature Prime lenses, LPL lens mount and PL-to-LPL Adapter."
+            model.caption = "Alexa LF"
+            
+            let format = Format(vendor: vendor.id, name: "Rec 709")
+            format.types = ["photo", "video"]
+            
+            return session.update_camera_reference(vendor: vendor, model: model, format: format)
+            //return session.update_camera_reference(format: format)
+            
+        }
+        .done({ _ in
+            
+        })
+        .catch { error in
+            debugPrint("Session error: ", error)
+        }
 
-        downloadManager.onProgress = { progress in
-            debugPrint(" /// onProgress: ", progress)
-        }
-        
-        downloadManager.onDownload = { profile, url in
-            if let p = profile as? Profile {
-                debugPrint(" /// film onDownload: ", p.caption)
-            }
-            else if let p = profile as? CameraProfile {
-                debugPrint(" /// camera onDownload: ", p.caption)
-            }
-        }
-        
-        downloadManager.onComplete = { error in
-            debugPrint(" /// onComplete: \(String(describing: error))")
-        }
-        
-        
-        let session = Session(base: Config.url, 
-                              client: Config.cuid, 
-                              api: Config.accessPair, 
-                              apiName: Config.accessName, 
-                              timeout: 60)
+    }
+//
+//    func applicationWillFinishLaunching(_ aNotification: Notification) {
+//        Swift.print("Register the follow api access: ")
+//        Swift.print("                         token: ", Config.accessPair.publicKey.encode())
+//        Swift.print("                          name: ", Config.accessName)
+//
+//
+//        downloadManager.onProgress = { progress in
+//            debugPrint(" /// onProgress: ", progress)
+//        }
+//
+//        downloadManager.onDownload = { profile, url in
+//            if let p = profile as? Profile {
+//                debugPrint(" /// film onDownload: ", p.caption)
+//            }
+//            else if let p = profile as? CameraProfile {
+//                debugPrint(" /// camera onDownload: ", p.caption)
+//            }
+//        }
+//
+//        downloadManager.onComplete = { error in
+//            debugPrint(" /// onComplete: \(String(describing: error))")
+//        }
+//
+//
+//        let session = Session(base: Config.url,
+//                              client: Config.cuid,
+//                              api: Config.accessPair,
+//                              apiName: Config.accessName,
+//                              timeout: 60)
         
 //        session
 //            .login()
@@ -185,22 +217,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //
 //            }
 //            .catch{ error in debugPrint("Session get_list error: ", error) }
-
-        
-        session
-            .login()
-            .done { session in
-                session
-                    .update_camera_profile(profile: "Apple-8_8S_8P-FiLMiC_Pro_Log_V2",
-                                           is_published: false)
-                    .catch{ error in
-                        debugPrint("Session error update_exports: ", error)
-                }
-        }
-        .catch{ error in
-            debugPrint("Session error update_exports: ", error)
-        }
-        
+//
+//
+//        session
+//            .login()
+//            .done { session in
+//                session
+//                    .update_camera_profile(profile: "Apple-8_8S_8P-FiLMiC_Pro_Log_V2",
+//                                           is_published: false)
+//                    .catch{ error in
+//                        debugPrint("Session error update_exports: ", error)
+//                }
+//        }
+//        .catch{ error in
+//            debugPrint("Session error update_exports: ", error)
+//        }
+//
         
 //        session
 //            .login(check: false)
@@ -215,7 +247,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //                debugPrint("Session error update_exports: ", error)
 //        }
 //
-    }    
+//    }
     
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
