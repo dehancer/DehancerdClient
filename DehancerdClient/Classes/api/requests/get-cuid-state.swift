@@ -12,24 +12,24 @@ import ed25519
 
 internal class get_cuid_state_request: Request {
     
-    public typealias ResponseType = Bool
+    typealias ResponseType = Bool
     
-    public var method: String  { return "get-cuid-state" }
-    public var params: Params? { return _params }
+    var method: String  { return "get-cuid-state" }
+    var params: Params? { return _params }
     
-    public class ParamsHelper: Params {
+    class ParamsHelper: Params {
         
-        public var cuid:String = ""
-        public var signature:String = ""
+        var cuid:String = ""
+        var signature:String = ""
         
-        override public func mapping(map: Map) {
+        override func mapping(map: Map) {
             super.mapping(map: map)
             cuid <- map["cuid"]
             signature <- map["signature"]
         }
     }
     
-    public init(key client_private_key: String, token: String) throws {
+    init(key client_private_key: String, token: String) throws {
         
         let pair = try Pair(fromPrivateKey: client_private_key)
         
@@ -42,7 +42,7 @@ internal class get_cuid_state_request: Request {
         _params.cuid = pair.publicKey.encode()
     }
     
-    public func response<R>(_ object: ResponsObject) throws -> R  {
+    func response<R>(_ object: ResponsObject) throws -> R  {
         return object as! R
     }
     

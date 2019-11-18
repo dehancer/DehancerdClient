@@ -16,7 +16,7 @@ public enum ResponseCode:Int {
     case invalidParams         = -32602
     case internalError         = -32603
     case serverErrorStart      = -32099
-    case serverErrorEnd       = -32000
+    case serverErrorEnd        = -32000
     case unknownErrorCode      = -32001
     
     case notAuthorized         = -40001

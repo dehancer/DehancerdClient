@@ -9,23 +9,23 @@ import Foundation
 import ObjectMapper
 import ed25519
 
-public class update_profile_exports_request: Request {
+internal class update_profile_exports_request: Request {
     
-    public typealias ResponseType = Bool
+    typealias ResponseType = Bool
     
-    public var method: String  { return "update-profile-exports" }
-    public var params: Params? { return _params }
+    var method: String  { return "update-profile-exports" }
+    var params: Params? { return _params }
     
-    public class ParamsHelper: Params {
+    class ParamsHelper: Params {
         
-        public var cuid:String = ""
-        public var signature:String = ""
-        public var name:String = ""
-        public var revision:Int = 0
-        public var count:Int = 0
-        public var files:Int = 0
+        var cuid:String = ""
+        var signature:String = ""
+        var name:String = ""
+        var revision:Int = 0
+        var count:Int = 0
+        var files:Int = 0
         
-        override public func mapping(map: Map) {
+        override func mapping(map: Map) {
             super.mapping(map: map)
             
             cuid           <- map["cuid"]
@@ -38,7 +38,7 @@ public class update_profile_exports_request: Request {
         }
     }
     
-    public init(
+    init(
         key client_private_key: String,
         token: String,
         
@@ -64,7 +64,7 @@ public class update_profile_exports_request: Request {
         _params.files = files       
     }
     
-    public func response<R>(_ object: ResponsObject) throws -> R  {
+    func response<R>(_ object: ResponsObject) throws -> R  {
         return object as! R
     }
     

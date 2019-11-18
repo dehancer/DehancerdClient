@@ -7,12 +7,12 @@ PODS:
     - PromiseKit
   - ed25519 (0.5.0)
   - ObjectMapper (3.5.1)
-  - PromiseKit (6.11.0):
-    - PromiseKit/CorePromise (= 6.11.0)
-    - PromiseKit/Foundation (= 6.11.0)
-    - PromiseKit/UIKit (= 6.11.0)
-  - PromiseKit/CorePromise (6.11.0)
-  - PromiseKit/Foundation (6.11.0):
+  - PromiseKit (6.12.0):
+    - PromiseKit/CorePromise (= 6.12.0)
+    - PromiseKit/Foundation (= 6.12.0)
+    - PromiseKit/UIKit (= 6.12.0)
+  - PromiseKit/CorePromise (6.12.0)
+  - PromiseKit/Foundation (6.12.0):
     - PromiseKit/CorePromise
 
 DEPENDENCIES:
@@ -40,7 +40,7 @@ SPEC CHECKSUMS:
   DehancerdClient: e2cfd92b567a08172a5b6974f78a5f065890f493
   ed25519: d29f5611ef45478aec704d93bfe536f2aff38f2d
   ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
-  PromiseKit: e4863d06976e7dee5e41c04fc7371c16b3600292
+  PromiseKit: c06835ba442ce5454ce3cdde470232804a6e4ff8
 
 PODFILE CHECKSUM: bf6bf3690b7f24026d43e0380766b2c1ab821410
 

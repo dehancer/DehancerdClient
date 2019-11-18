@@ -1,29 +1,29 @@
 //
-//  update-camera-profile.swift
+//  update-film-profile.swift
 //  DehancerCommon
 //
-//  Created by denn nevera on 13/10/2019.
+//  Created by denn nevera on 13/11/2019.
 //
 
 import Foundation
 import ObjectMapper
 import ed25519
 
-public class update_camera_profile_request: Request {
+internal class update_film_profile_request: Request {
     
-    public typealias ResponseType = Bool
+    typealias ResponseType = Bool
     
-    public var method: String  { return "update-camera-profile" }
-    public var params: Params? { return _params }
+    var method: String  { return "update-film-profile" }
+    var params: Params? { return _params }
     
-    public class ParamsHelper: Params {
+    class ParamsHelper: Params {
         
-        public var cuid:String = ""
-        public var signature:String = ""
-        public var id:String = ""
-        public var is_published:Bool = false
+        var cuid:String = ""
+        var signature:String = ""
+        var id:String = ""
+        var is_published:Bool = false
         
-        override public func mapping(map: Map) {
+        override func mapping(map: Map) {
             super.mapping(map: map)
             
             cuid           <- map["cuid"]
@@ -34,7 +34,7 @@ public class update_camera_profile_request: Request {
         }
     }
     
-    public init(
+    init(
         key client_private_key: String,
         token: String,
         
@@ -56,7 +56,7 @@ public class update_camera_profile_request: Request {
         _params.is_published = is_published
     }
     
-    public func response<R>(_ object: ResponsObject) throws -> R  {
+    func response<R>(_ object: ResponsObject) throws -> R  {
         return object as! R
     }
     

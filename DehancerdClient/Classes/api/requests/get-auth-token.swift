@@ -12,19 +12,19 @@ import ed25519
 
 internal class get_auth_token_request: Request {
 
-    public typealias ResponseType = ResponseHelper
+    typealias ResponseType = ResponseHelper
 
-    public let api_name:String
+    let api_name:String
 
-    public var method: String  { return "get-auth-token" }
-    public var params: Params? { return _params }
+    var method: String  { return "get-auth-token" }
+    var params: Params? { return _params }
     
-    public class ParamsHelper: Params {
-        public var token:String = ""
-        public var cuid:String = ""
-        public var digest:String = ""
-        public var signature:String = ""
-        override public func mapping(map: Map) {
+    class ParamsHelper: Params {
+        var token:String = ""
+        var cuid:String = ""
+        var digest:String = ""
+        var signature:String = ""
+        override func mapping(map: Map) {
             super.mapping(map: map)
             token <- map["api-access-token"]
             cuid <- map["cuid"]
@@ -33,14 +33,14 @@ internal class get_auth_token_request: Request {
         }
     }
     
-    public class ResponseHelper: Response {
+    class ResponseHelper: Response {
         
-        public var token: String { return _token }
+        var token: String { return _token }
         
-        public convenience init?(_ token: String) {
+        convenience init?(_ token: String) {
             self.init(JSON: ["token": token])
         }
-        override public func mapping(map: Map) {
+        override func mapping(map: Map) {
             super.mapping(map: map)
             _token <- map["token"]
         }
@@ -48,7 +48,7 @@ internal class get_auth_token_request: Request {
     }
     
   
-    public init(cuid public_key:String,
+    init(cuid public_key:String,
                 key access_token_private_key: String,
                 api name: String) throws {
         
@@ -67,7 +67,7 @@ internal class get_auth_token_request: Request {
         _params.digest = digest.encode()
     }
     
-    public func response<R>(_ object: ResponsObject) throws -> R  {
+    func response<R>(_ object: ResponsObject) throws -> R  {
         return ResponseHelper("\(object)") as! R
     }
         

@@ -9,44 +9,20 @@ import Foundation
 import ObjectMapper
 import ed25519
 
-public typealias UserInfo = set_user_info_request.ParamsHelper
-
-public class set_user_info_request: Request {
+internal class set_user_info_request: Request {
     
-    public typealias ResponseType = Bool
+    typealias ResponseType = Bool
+    typealias ParamsHelper = UserInfo
     
-    public var method: String  { return "set-user-info" }
-    public var params: Params? { return _params }
+    var method: String  { return "set-user-info" }
+    var params: Params? { return _params }
     
-    public class ParamsHelper: Params {
-        
-        public var cuid:String = ""
-        public var signature:String = ""
-        public var name:String = ""
-        public var full_name:String = ""
-        public var email:String = ""
-        public var client_name:String = ""
-        public var client_version:String = ""
-        
-        override public func mapping(map: Map) {
-            super.mapping(map: map)
-           
-            cuid           <- map["cuid"]
-            signature      <- map["signature"]
-            
-            name           <- map["name"]
-            full_name      <- map["full-name"]
-            email          <- map["email"]
-            client_name    <- map["client-name"]
-            client_version <- map["client-version"]
-        }
-    }
     
-    public init(info:UserInfo) {
+    init(info:UserInfo) {
         _params = info
     }
     
-    public init(
+    init(
         key client_private_key: String,
         token: String,
         
@@ -77,7 +53,7 @@ public class set_user_info_request: Request {
         _params.client_version = "\(version)(\(build))"
     }
     
-    public func response<R>(_ object: ResponsObject) throws -> R  {
+    func response<R>(_ object: ResponsObject) throws -> R  {
         return object as! R
     }
     

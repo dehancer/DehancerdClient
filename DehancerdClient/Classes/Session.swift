@@ -320,6 +320,38 @@ public final class Session {
         }
     }
     
+    public func upload_film_profile(data: String) -> Promise<Session> {
+           return Promise { promise in
+               
+               guard let token = self.accessToken else {
+                   return promise.reject(Errors.notAuthorized)
+               }
+               
+               let exports = try upload_film_profile_request(key: self.clientPair.privateKey.encode(),
+                                                                token: token,
+                                                                data: data)
+               
+               self.rpc.send(request: exports) { result  in
+                   switch result {
+                       
+                   case .success(let permit, let id):
+                       
+                       if !permit {
+                           return promise.reject(JsonRpc.Errors.response(responseId: id,
+                                                                         code: ResponseCode.accessForbidden,
+                                                                         message: String.localizedStringWithFormat("Access forbidenn")))
+                       }
+                       else {
+                           return promise.fulfill(self)
+                       }
+                       
+                   case .error(let error):
+                       return promise.reject(error)
+                   }
+               }
+           }
+       }
+    
     public func update_camera_profile(profile id:String, is_published: Bool) -> Promise<Session> {
         return Promise { promise in
             
@@ -352,6 +384,39 @@ public final class Session {
             }
         }
     }
+    
+    public func update_film_profile(profile id:String, is_published: Bool) -> Promise<Session> {
+           return Promise { promise in
+               
+               guard let token = self.accessToken else {
+                   return promise.reject(Errors.notAuthorized)
+               }
+               
+               let exports = try update_film_profile_request(key: self.clientPair.privateKey.encode(),
+                                                                token: token,
+                                                                profile: id,
+                                                                is_published: is_published)
+               
+               self.rpc.send(request: exports) { result  in
+                   switch result {
+                       
+                   case .success(let permit, let id):
+                       
+                       if !permit {
+                           return promise.reject(JsonRpc.Errors.response(responseId: id,
+                                                                         code: ResponseCode.accessForbidden,
+                                                                         message: String.localizedStringWithFormat("Access forbidenn")))
+                       }
+                       else {
+                           return promise.fulfill(self)
+                       }
+                       
+                   case .error(let error):
+                       return promise.reject(error)
+                   }
+               }
+           }
+       }
     
     private func get_new_token() -> Promise<String> {
         return Promise { promise in
