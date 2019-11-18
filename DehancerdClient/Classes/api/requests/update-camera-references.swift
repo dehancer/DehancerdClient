@@ -1,46 +1,45 @@
 //
-//  update-film-profile.swift
-//  DehancerCommon
+//  get-camera-list.swift
+//  CryptoSwift
 //
-//  Created by denn nevera on 13/11/2019.
+//  Created by denn nevera on 11/10/2019.
 //
 
 import Foundation
 import ObjectMapper
 import ed25519
 
-public class update_film_profile_request: Request {
+internal class update_camera_reference_request: Request {
     
     public typealias ResponseType = Bool
-    
-    public var method: String  { return "update-film-profile" }
+
+    public var method: String  { return "update-camera-reference" }
     public var params: Params? { return _params }
     
     public class ParamsHelper: Params {
         
         public var cuid:String = ""
         public var signature:String = ""
-        public var id:String = ""
-        public var is_published:Bool = false
-        
+        public var vendor:Vendor?
+        public var model:Model?
+        public var format:Format?
+
         override public func mapping(map: Map) {
             super.mapping(map: map)
-            
-            cuid           <- map["cuid"]
-            signature      <- map["signature"]
-            
-            id            <- map["id"]
-            is_published  <- map["is_published"]
+            cuid <- map["cuid"]
+            signature <- map["signature"]
+            vendor <- map["vendor"]
+            model <- map["model"]
+            format <- map["format"]
         }
     }
     
-    public init(
-        key client_private_key: String,
-        token: String,
-        
-        profile id: String,
-        is_published:Bool
-        ) throws {
+    public init(key client_private_key: String,
+                token: String,
+                vendor:Vendor? = nil,
+                model:Model? = nil,
+                format:Format? = nil
+    ) throws {
         
         let pair = try Pair(fromPrivateKey: client_private_key)
         
@@ -48,12 +47,12 @@ public class update_film_profile_request: Request {
             calculator.append(token)
             calculator.append(pair.publicKey.encode())
         }
-        
+
         _params.signature = pair.sign(digest).encode()
         _params.cuid = pair.publicKey.encode()
-        
-        _params.id = id
-        _params.is_published = is_published
+        _params.vendor = vendor
+        _params.model = model
+        _params.format = format
     }
     
     public func response<R>(_ object: ResponsObject) throws -> R  {

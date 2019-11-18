@@ -11,18 +11,18 @@ import ObjectMapper
 
 internal class help: Request {
     
-    public typealias ResponseType = ResponseHelper
+    typealias ResponseType = ResponseHelper
     
-    public class ResponseHelper: Response {
+    class ResponseHelper: Response {
         public var method_list: [String:Any] = [:]
         override public func mapping(map: Map) {
             method_list <- map["method_list"]
         }
     }
 
-    public var method: String  { return "help" }
-    public var params: Params? {return nil }
-    public func response<R>(_ result: ResponsObject) throws -> R  {
+    var method: String  { return "help" }
+    var params: Params? {return nil }
+    func response<R>(_ result: ResponsObject) throws -> R  {
         return ResponseHelper(JSON: ["method_list": result]) as! R 
     }
 }

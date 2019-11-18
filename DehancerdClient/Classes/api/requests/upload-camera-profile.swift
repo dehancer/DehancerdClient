@@ -1,28 +1,28 @@
 //
-//  upload-film-profile.swift
-//  DehancerCommon
+//  upload-camera-profile.swift
+//  DehancerdClient
 //
-//  Created by denn nevera on 13/11/2019.
+//  Created by denn nevera on 12/10/2019.
 //
 
 import Foundation
 import ObjectMapper
 import ed25519
 
-public class upload_film_profile_request: Request {
+internal class upload_camera_profile_request: Request {
     
-    public typealias ResponseType = Bool
+    typealias ResponseType = Bool
     
-    public var method: String  { return "upload-film-profile" }
-    public var params: Params? { return _params }
+    var method: String  { return "upload-camera-profile" }
+    var params: Params? { return _params }
     
-    public class ParamsHelper: Params {
+    class ParamsHelper: Params {
         
-        public var cuid:String = ""
-        public var signature:String = ""
-        public var data:String = ""
+        var cuid:String = ""
+        var signature:String = ""
+        var data:String = ""
         
-        override public func mapping(map: Map) {
+        override func mapping(map: Map) {
             super.mapping(map: map)
             
             cuid           <- map["cuid"]
@@ -31,9 +31,9 @@ public class upload_film_profile_request: Request {
         }
     }
     
-    public init(
+    init(
         key client_private_key: String,
-        token: String,
+        token: String,        
         data: String
         ) throws {
         
@@ -49,7 +49,7 @@ public class upload_film_profile_request: Request {
         _params.data = data
     }
     
-    public func response<R>(_ object: ResponsObject) throws -> R  {
+    func response<R>(_ object: ResponsObject) throws -> R  {
         return object as! R
     }
     

@@ -9,28 +9,13 @@ import Foundation
 import ObjectMapper
 import ed25519
 
-public class CommonStat: Mappable {
-    
-    public var all_users = 0
-    public var launched = 0
-    public var files = 0
-      
-    public required init?(map: Map) {}
-    
-    public func mapping(map: Map) {        
-        all_users <- map["all_users"]
-        launched <- map["launched"]
-        files <- map["files"]      
-    }
-}
-
 internal class get_statistics_request: Request {    
     
-    public var method: String  { return "get-statistics" }
+    var method: String  { return "get-statistics" }
     
-    public var params: Params? { return _params }
+    var params: Params? { return _params }
 
-    public class ParamsHelper: Params {        
+    class ParamsHelper: Params {
         public var name:String = "common"        
         override public func mapping(map: Map) {
             super.mapping(map: map)
@@ -38,7 +23,7 @@ internal class get_statistics_request: Request {
         }
     }
     
-    public init(name:String) {
+    init(name:String) {
         _params.name = name
     }
     
