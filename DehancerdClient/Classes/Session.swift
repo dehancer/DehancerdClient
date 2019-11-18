@@ -110,14 +110,18 @@ public final class Session {
        return get_film_profile_list()
     }
     
-    public func get_film_profile_list () -> Promise<[Profile]> {
+    public func get_film_profile_list (id:String="", all:Bool = false) -> Promise<[Profile]> {
         return Promise { promise in
             
             guard let token = self.accessToken else {
                 return promise.reject(Errors.notAuthorized)
             }
             
-            let list = try get_film_profile_list_request(key: self.clientPair.privateKey.encode(), token: token)
+            let list = try get_film_profile_list_request(key: self.clientPair.privateKey.encode(),
+                                                         token: token,
+                                                         id:id,
+                                                         all: all
+            )
             
             self.rpc.send(request: list) { result  in
                 switch result {

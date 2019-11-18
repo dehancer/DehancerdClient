@@ -57,13 +57,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                               apiName: Config.accessName,
                               timeout: 60)
 
-//        session
-//            .get_statistic(name: "common")
-//            .done { result in
-//                debugPrint("get_statistic: ", result.toJSON())
-//            }.catch { error in
-//                debugPrint("Session error: ", error)
-//        }
+        session
+            .get_statistic(name: "common")
+            .done { result in
+                debugPrint("get_statistic: ", result.toJSON())
+            }.catch { error in
+                debugPrint("Session error: ", error)
+        }
         
         session
             .login()

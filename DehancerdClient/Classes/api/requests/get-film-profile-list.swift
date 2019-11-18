@@ -22,15 +22,23 @@ internal class get_film_profile_list_request: Request {
         
         var cuid:String = ""
         var signature:String = ""
+        var id:String = ""
+        var all = false
         
         override func mapping(map: Map) {
             super.mapping(map: map)
             cuid <- map["cuid"]
             signature <- map["signature"]
+            id <- map["id"]
+            all <- map["all"]
         }
     }
     
-    init(key client_private_key: String, token: String) throws {
+    init(key client_private_key: String,
+         token: String,
+         id: String = "",
+         all: Bool = false
+    ) throws {
         
         let pair = try Pair(fromPrivateKey: client_private_key)
         
@@ -38,9 +46,11 @@ internal class get_film_profile_list_request: Request {
             calculator.append(token)
             calculator.append(pair.publicKey.encode())
         }
-
+        
         _params.signature = pair.sign(digest).encode() 
         _params.cuid = pair.publicKey.encode()
+        _params.id = id
+        _params.all = all
     }
     
     func response<R>(_ object: ResponsObject) throws -> R  {
