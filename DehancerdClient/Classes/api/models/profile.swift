@@ -10,12 +10,12 @@ import ObjectMapper
 
 public class Profile: Mappable {
     
-    public var author = ""
+    public var id = ""
+    public var revision = 0
     public var caption = ""
     public var description = ""
-    public var id = ""
+    public var author = ""
     public var maintainer = ""
-    public var revision = 0
     public var tags = ""
     public var url:URL?
     public var datetime:Date?

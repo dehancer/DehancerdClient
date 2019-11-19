@@ -292,7 +292,7 @@ public final class Session {
         }
     }
     
-    public func upload_camera_profile(data: String) -> Promise<Session> {
+    public func upload_camera_profile(data: String, is_published:Bool?=nil) -> Promise<Session> {
         return Promise { promise in
             
             guard let token = self.accessToken else {
@@ -301,7 +301,7 @@ public final class Session {
             
             let exports = try upload_camera_profile_request(key: self.clientPair.privateKey.encode(),
                                                              token: token,
-                                                             data: data)
+                                                             data: data, is_published:is_published)
             
             self.rpc.send(request: exports) { result  in
                 switch result {
@@ -324,7 +324,7 @@ public final class Session {
         }
     }
     
-    public func upload_film_profile(data: String) -> Promise<Session> {
+    public func upload_film_profile(data: String, is_published:Bool?=nil) -> Promise<Session> {
            return Promise { promise in
                
                guard let token = self.accessToken else {
@@ -333,7 +333,7 @@ public final class Session {
                
                let exports = try upload_film_profile_request(key: self.clientPair.privateKey.encode(),
                                                                 token: token,
-                                                                data: data)
+                                                                data: data, is_published:is_published)
                
                self.rpc.send(request: exports) { result  in
                    switch result {

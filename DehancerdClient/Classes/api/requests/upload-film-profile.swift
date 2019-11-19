@@ -21,20 +21,23 @@ internal class upload_film_profile_request: Request {
         var cuid:String = ""
         var signature:String = ""
         var data:String = ""
-        
+        var is_published:Bool? 
+
         override func mapping(map: Map) {
             super.mapping(map: map)
             
             cuid           <- map["cuid"]
             signature      <- map["signature"]
             data           <- map["data"]
+            is_published   <- map["is_published"]
         }
     }
     
     init(
         key client_private_key: String,
         token: String,
-        data: String
+        data: String,
+        is_published: Bool? = nil
         ) throws {
         
         let pair = try Pair(fromPrivateKey: client_private_key)
@@ -46,7 +49,8 @@ internal class upload_film_profile_request: Request {
         
         _params.signature = pair.sign(digest).encode()
         _params.cuid = pair.publicKey.encode()
-        _params.data = data
+        _params.data = data        
+        _params.is_published = is_published
     }
     
     func response<R>(_ object: ResponsObject) throws -> R  {
