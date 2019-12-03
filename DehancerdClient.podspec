@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "DehancerdClient"
-  s.version      = "0.5.0"
+  s.version      = "0.5.1"
   s.summary      = "Dehancerd services client"
   s.description  = "Dehancerd services client"
 

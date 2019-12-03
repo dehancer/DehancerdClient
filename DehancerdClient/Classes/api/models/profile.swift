@@ -7,6 +7,7 @@
 
 import Foundation
 import ObjectMapper
+import DehancerCommon
 
 public class Profile: Mappable {
     
@@ -24,6 +25,8 @@ public class Profile: Mappable {
     public var is_published:Bool = false
     public var is_photo_enabled:Bool = false
     public var is_video_enabled:Bool = false
+    public var license_matrix:[LicenseType] = []
+
 
     public required init?(map: Map) {}
     
@@ -40,6 +43,7 @@ public class Profile: Mappable {
         is_published        <- map["is_published"]
         is_photo_enabled    <- map["is_photo_enabled"]
         is_video_enabled    <- map["is_video_enabled"]
+        license_matrix <- map["license_matrix"]
 
         if let context = map.context as? Context {
             url <- (map["url"], SignedURLTransform(context: context))
