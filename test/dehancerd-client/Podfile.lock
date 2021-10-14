@@ -1,18 +1,18 @@
 PODS:
-  - DehancerCommon (0.2.1)
-  - DehancerdClient (0.4.1):
+  - DehancerCommon (0.7.4)
+  - DehancerdClient (0.6.0):
     - DehancerCommon
     - ed25519
     - ObjectMapper
     - PromiseKit
   - ed25519 (0.5.0)
-  - ObjectMapper (3.5.1)
-  - PromiseKit (6.12.0):
-    - PromiseKit/CorePromise (= 6.12.0)
-    - PromiseKit/Foundation (= 6.12.0)
-    - PromiseKit/UIKit (= 6.12.0)
-  - PromiseKit/CorePromise (6.12.0)
-  - PromiseKit/Foundation (6.12.0):
+  - ObjectMapper (3.5.2)
+  - PromiseKit (6.13.1):
+    - PromiseKit/CorePromise (= 6.13.1)
+    - PromiseKit/Foundation (= 6.13.1)
+    - PromiseKit/UIKit (= 6.13.1)
+  - PromiseKit/CorePromise (6.13.1)
+  - PromiseKit/Foundation (6.13.1):
     - PromiseKit/CorePromise
 
 DEPENDENCIES:
@@ -36,11 +36,11 @@ EXTERNAL SOURCES:
     :path: "../../../ed25519cpp"
 
 SPEC CHECKSUMS:
-  DehancerCommon: 6409f90938706d2cff7501ae425926ec0b9c65d7
-  DehancerdClient: e2cfd92b567a08172a5b6974f78a5f065890f493
+  DehancerCommon: b028ee088be0dae77faa92252478ed1966de9768
+  DehancerdClient: c5a772dc6d0a37a2bfb5620f2688978e008637f2
   ed25519: d29f5611ef45478aec704d93bfe536f2aff38f2d
-  ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
-  PromiseKit: c06835ba442ce5454ce3cdde470232804a6e4ff8
+  ObjectMapper: b53ae947d370bf89423e86be7d4e2d2b2a8d3f40
+  PromiseKit: 28fda91c973cc377875d8c0ea4f973013c05b6db
 
 PODFILE CHECKSUM: bf6bf3690b7f24026d43e0380766b2c1ab821410
 

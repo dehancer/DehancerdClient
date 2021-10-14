@@ -139,6 +139,35 @@ public final class Session {
         }
     }
     
+    public func get_print_profile_list (id:String="", all:Bool = false) -> Promise<[Profile]> {
+        return Promise { promise in
+            
+            guard let token = self.accessToken else {
+                return promise.reject(Errors.notAuthorized)
+            }
+            
+            let list = try get_print_profile_list_request(key: self.clientPair.privateKey.encode(),
+                                                         token: token,
+                                                         id:id,
+                                                         all: all
+            )
+            
+            self.rpc.send(request: list) { result  in
+                switch result {
+                    
+                    case .success(let data,_):
+                        
+                        return promise.fulfill(data)
+                    
+                    case .error(let error):
+                        
+                        return promise.reject(error)
+                    
+                }
+            }
+        }
+    }
+    
     public func get_camera_profile_list (id:String="", all:Bool = false) -> Promise<[CameraProfile]> {
         return Promise { promise in
             
@@ -356,6 +385,38 @@ public final class Session {
            }
        }
     
+    public func upload_print_profile(data: String, is_published:Bool?=nil) -> Promise<Session> {
+              return Promise { promise in
+                  
+                  guard let token = self.accessToken else {
+                      return promise.reject(Errors.notAuthorized)
+                  }
+                  
+                  let exports = try upload_print_profile_request(key: self.clientPair.privateKey.encode(),
+                                                                   token: token,
+                                                                   data: data, is_published:is_published)
+                  
+                  self.rpc.send(request: exports) { result  in
+                      switch result {
+                          
+                      case .success(let permit, let id):
+                          
+                          if !permit {
+                              return promise.reject(JsonRpc.Errors.response(responseId: id,
+                                                                            code: ResponseCode.accessForbidden,
+                                                                            message: String.localizedStringWithFormat("Access forbidenn")))
+                          }
+                          else {
+                              return promise.fulfill(self)
+                          }
+                          
+                      case .error(let error):
+                          return promise.reject(error)
+                      }
+                  }
+              }
+          }
+    
     public func update_camera_profile(profile id:String, is_published: Bool) -> Promise<Session> {
         return Promise { promise in
             
@@ -422,6 +483,39 @@ public final class Session {
            }
        }
     
+    public func update_print_profile(profile id:String, is_published: Bool) -> Promise<Session> {
+              return Promise { promise in
+                  
+                  guard let token = self.accessToken else {
+                      return promise.reject(Errors.notAuthorized)
+                  }
+                  
+                  let exports = try update_print_profile_request(key: self.clientPair.privateKey.encode(),
+                                                                   token: token,
+                                                                   profile: id,
+                                                                   is_published: is_published)
+                  
+                  self.rpc.send(request: exports) { result  in
+                      switch result {
+                          
+                      case .success(let permit, let id):
+                          
+                          if !permit {
+                              return promise.reject(JsonRpc.Errors.response(responseId: id,
+                                                                            code: ResponseCode.accessForbidden,
+                                                                            message: String.localizedStringWithFormat("Access forbidenn")))
+                          }
+                          else {
+                              return promise.fulfill(self)
+                          }
+                          
+                      case .error(let error):
+                          return promise.reject(error)
+                      }
+                  }
+              }
+          }
+       
     private func get_new_token() -> Promise<String> {
         return Promise { promise in
             
